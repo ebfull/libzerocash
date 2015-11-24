@@ -525,7 +525,7 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
     wit1 = coinValues.at(2);
     libzerocash::hashVectors(coinValues.at(0), coinValues.at(1), wit2);
     libzerocash::hashVectors(coinValues.at(4), zeros, inter_1);
-    libzerocash::hashVectors(zeros, zeros, inter_2);
+    inter_2 = zeros;
     libzerocash::hashVectors(inter_1, inter_2, wit3);
 
     BOOST_CHECK(christina_witness.size() == 16);
@@ -537,11 +537,6 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
         (christina_witness.at(14) == wit2) &&
         (christina_witness.at(15) == wit1)
     );
-
-    /* Uncomment this to make the test pass, and to prove to yourself that the
-     * two implementations are different in exactly this way. */
-    // inter_2 = zeros;
-    // libzerocash::hashVectors(inter_1, inter_2, wit3);
 
     BOOST_CHECK(witness.size() == 64);
     for (size_t i = 0; i < 61 /* 61 */; i++) {

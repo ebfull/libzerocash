@@ -115,7 +115,12 @@ void MerkleTree::constructTree(Node* curr, std::vector< std::vector<bool> > &coi
         constructTree(curr->right, coinList, int((left+right)/2)+1, right);
 
         std::vector<bool> hash(SHA256_BLOCK_SIZE * 8);
-        hashVectors(&ctx256, curr->left->value, curr->right->value, hash);
+        if (VectorIsZero(curr->left->value) && VectorIsZero(curr->right->value)) {
+            std::vector<bool> zeros(cm_size * 8, 0);
+            hash = zeros;
+        } else {
+            hashVectors(&ctx256, curr->left->value, curr->right->value, hash);
+        }
 
         curr->value = hash;
     }

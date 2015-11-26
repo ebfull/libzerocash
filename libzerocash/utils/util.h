@@ -45,6 +45,8 @@ void convertIntToBytesVector(const uint64_t val_int, std::vector<unsigned char>&
 
 void convertIntToVector(uint64_t val, std::vector<bool>& v);
 
+uint64_t convertVectorToInt(const std::vector<bool>& v);
+
 uint64_t convertBytesVectorToInt(const std::vector<unsigned char>& bytes);
 
 void concatenateVectors(const std::vector<bool>& A, const std::vector<bool>& B, std::vector<bool>& result);

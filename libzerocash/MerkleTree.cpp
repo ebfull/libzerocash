@@ -127,6 +127,7 @@ void MerkleTree::constructTree(Node* curr, std::vector< std::vector<bool> > &coi
 }
 
 void MerkleTree::addCoinMapping(const std::vector<bool> &hashV, int index) {
+    // XXX: why are the next 3 lines here... they don't affect the outcome?
     unsigned char hash[SHA256_BLOCK_SIZE + 1];
     convertVectorToBytes(hashV, hash);
     hash[SHA256_BLOCK_SIZE] = '\0';
@@ -135,6 +136,7 @@ void MerkleTree::addCoinMapping(const std::vector<bool> &hashV, int index) {
 }
 
 int MerkleTree::getCoinMapping(const std::vector<bool> &hashV) {
+    // XXX: why are the next 3 lines here... they don't affect the outcome?
     unsigned char hash[SHA256_BLOCK_SIZE + 1];
     convertVectorToBytes(hashV, hash);
     hash[SHA256_BLOCK_SIZE] = '\0';
@@ -164,6 +166,7 @@ void MerkleTree::getWitness(const std::vector<bool> &coin, merkle_authentication
     }
     else {
         std::cout << "Coin does not exist in the tree!" << std::endl;
+        // XXX: throw an exception instead
         exit(-1);
     }
 }

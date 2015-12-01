@@ -303,6 +303,7 @@ void hashVectors(const std::vector<unsigned char> left, const std::vector<unsign
 }
 
 bool VectorIsZero(const std::vector<bool> test) {
+    // XXX: not time safe
 	return (test.end() == std::find(test.begin(), test.end(), true));
 }
 

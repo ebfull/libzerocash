@@ -15,87 +15,102 @@
 #include <iostream>
 #include <vector>
 
+#define BOOST_TEST_MODULE merkleTest
+#include <boost/test/included/unit_test.hpp>
+
 using namespace libzerocash;
 using namespace std;
 
-void writeOut(const vector<bool>& data)
+void constructNonzeroTestVector(std::vector< std::vector<bool> > &values, uint32_t size)
 {
-  for (vector<bool>::const_iterator it = data.begin(); it != data.end(); it++)
-  {
-    cout << *it;
-  }
-}
+    values.resize(0);
+    std::vector<bool> dummy;
+    dummy.resize(256);
+    dummy[0] = true;
 
-void constructTestVector(std::vector< std::vector<bool> > &values)
-{
-	std::vector<bool> dummy;
-	dummy.resize(256);
-
-	for (int i = 0; i < 2; i++)
+    for (uint32_t i = 0; i < size; i++)
     {
-		values.push_back(dummy);
-	}
+        values.push_back(dummy);
+    }
 }
 
-bool testCompactRep(IncrementalMerkleTree &inTree)
+void constructZeroTestVector(std::vector< std::vector<bool> > &values, uint32_t size)
 {
-	IncrementalMerkleTreeCompact compact;
-	std::vector<bool> root1, root2;
+    values.resize(0);
+    std::vector<bool> dummy;
+    dummy.resize(256);
 
-	if (inTree.getCompactRepresentation(compact) == false)
+    for (uint32_t i = 0; i < size; i++)
     {
-		cout << "Unable to generate compact representation." << endl;
-		return false;
-	}
-
-	IncrementalMerkleTree newTree(compact);
-
-	inTree.getRootValue(root1);
-	newTree.getRootValue(root2);
-
-	cout << "Original root: ";
-	printVector(root1);
-	cout << endl;
-
-	cout << "New root: ";
-	printVector(root2);
-	cout << endl;
-
-	if (root1 == root2) {
-		cout << "TEST PASSED" << endl;
-	}
-
-	return true;
+        values.push_back(dummy);
+    }
 }
 
+BOOST_AUTO_TEST_CASE( testRootConsistencyZeroValues ) {
+    IncrementalMerkleTree incTree;
+    std::vector< std::vector<bool> > values;
+    std::vector<bool> root1;
+    std::vector<bool> root2;
 
+    constructZeroTestVector(values, 2);
 
-int main()
-{
-  IncrementalMerkleTree incTree;
+    // Create an IncrementalMerkleTree over the values.
+    if (incTree.insertVector(values) == false) {
+        BOOST_ERROR("Could not insert into the tree.");
+    }
+    incTree.prune();
 
-  std::vector<bool> index;
-  std::vector< std::vector<bool> > values;
-  std::vector<bool> rootHash;
+    // Create a MerkleTree over the values.
+    MerkleTree oldTree(values);
 
-  constructTestVector(values);
+    incTree.getRootValue(root1);
+    oldTree.getRootValue(root2);
 
-  if (incTree.insertVector(values) == false) {
-	 cout << "Could not insert" << endl;
-  }
-  incTree.prune();
+    BOOST_CHECK( root1 == root2 );
+}
 
-  MerkleTree oldTree(values);
+BOOST_AUTO_TEST_CASE( testRootConsistencyNonzeroValues ) {
+    IncrementalMerkleTree incTree;
+    std::vector< std::vector<bool> > values;
+    std::vector<bool> root1;
+    std::vector<bool> root2;
 
-  cout << "Incremental Tree: ";
-  incTree.getRootValue(rootHash);
-  writeOut(rootHash);
-  cout << endl;
+    constructNonzeroTestVector(values, 2);
 
-  cout << "Old Merkle Tree: ";
-  oldTree.getRootValue(rootHash);
-  writeOut(rootHash);
-  cout << endl;
+    // Create an IncrementalMerkleTree over the values.
+    if (incTree.insertVector(values) == false) {
+        BOOST_ERROR("Could not insert into the tree.");
+    }
+    incTree.prune();
 
-  testCompactRep(incTree);
+    // Create a MerkleTree over the values.
+    MerkleTree oldTree(values);
+
+    incTree.getRootValue(root1);
+    oldTree.getRootValue(root2);
+
+    BOOST_CHECK( root1 == root2 );
+}
+
+BOOST_AUTO_TEST_CASE( testCompactRepresentation ) {
+    for (uint32_t num_entries = 0; num_entries < 100; num_entries++) {
+        std::vector< std::vector<bool> > values;
+        std::vector<bool> root1, root2;
+        IncrementalMerkleTree incTree;
+
+        constructNonzeroTestVector(values, num_entries);
+
+        BOOST_REQUIRE( incTree.insertVector(values) );
+        BOOST_REQUIRE( incTree.prune() );
+
+        IncrementalMerkleTreeCompact compact;
+        BOOST_REQUIRE( incTree.getCompactRepresentation(compact) );
+
+        IncrementalMerkleTree newTree(compact);
+
+        incTree.getRootValue(root1);
+        incTree.getRootValue(root2);
+
+        BOOST_REQUIRE( root1 == root2 );
+    }
 }

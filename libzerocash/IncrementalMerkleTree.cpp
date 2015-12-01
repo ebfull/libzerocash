@@ -170,8 +170,6 @@ namespace libzerocash {
     IncrementalMerkleTree::prune()
     {
 		return this->root.prune();
-
-        return false;
     }
 
     bool
@@ -479,7 +477,17 @@ namespace libzerocash {
             return this->right->getCompactRepresentation(rep);
         }
 
-        return false;
+        // We get here in one of the following cases:
+        // 1. Our left child is a leaf, and there's no right child.
+        // 2. Our left child is a full tree, and there's no right child.
+
+        // We've gone right for the last time, now we go left until we reach the
+        // bottom.
+        for (uint32_t i = this->nodeDepth + 1; i < this->treeHeight; i++) {
+            rep.hashList.at(i) = false;
+        }
+
+        return true;
     }
 
     bool
@@ -494,10 +502,14 @@ namespace libzerocash {
 
         // If we have any subtrees (or this tree already has stuff in it), clean it out.
         if (this->left) {
+            // XXX memory leak: left might have the only pointers to its heap
+            // allocated children!
             delete this->left;
             this->left = NULL;
         }
         if (this->right) {
+            // XXX memory leak: right might have the only pointers to its heap
+            // allocated children!
             delete this->right;
             this->right = NULL;
         }

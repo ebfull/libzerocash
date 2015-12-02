@@ -29,6 +29,14 @@ namespace libzerocash {
 
 /******************* Incremental Merkle tree compact *************************/
 
+/* This is a comapct way to represent an incremental merkle tree, where all full
+ * subtrees are replaced by their hashes. It contains just enough information
+ * that you can continue addding elements to the tree.
+ *
+ * This class can only be constructed by IncrementalMerkleTree, and after that,
+ * it is immutable. To act on a compact representation, it must first be
+ * de-compactified by loading it into an IncrementalMerkleTree.
+ */
 class IncrementalMerkleTreeCompact {
     friend class IncrementalMerkleTree;
     friend class IncrementalMerkleNode;

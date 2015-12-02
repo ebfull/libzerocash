@@ -464,12 +464,11 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
 	copyTree.prune();
 
 	cout << "Obtaining compact representation and reconstituting tree...\n" << endl;
-	libzerocash::IncrementalMerkleTreeCompact compactTree;
-	merkleTree.getCompactRepresentation(compactTree);
+	libzerocash::IncrementalMerkleTreeCompact compactTree = merkleTree.getCompactRepresentation();
 
 	cout << "Compact representation vector: ";
-	libzerocash::printBytesVector(compactTree.hashListBytes);
-	libzerocash::printVector(compactTree.hashList);
+	libzerocash::printBytesVector(compactTree.getHashListBytes());
+	libzerocash::printVector(compactTree.getHashList());
 
 	libzerocash::IncrementalMerkleTree reconstitutedTree(compactTree);
 	reconstitutedTree.getRootValue(root);

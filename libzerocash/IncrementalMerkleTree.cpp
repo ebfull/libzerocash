@@ -172,17 +172,15 @@ namespace libzerocash {
 		return this->root.prune();
     }
 
-    bool
-    IncrementalMerkleTree::getCompactRepresentation(IncrementalMerkleTreeCompact &rep)
+    IncrementalMerkleTreeCompact
+    IncrementalMerkleTree::getCompactRepresentation()
     {
-        bool result = false;
-
-        rep.clear();
+        IncrementalMerkleTreeCompact rep;
         rep.hashList.resize(this->treeHeight);
 		rep.treeHeight = this->treeHeight;
         std::fill (rep.hashList.begin(), rep.hashList.end(), false);
 
-		result = this->root.getCompactRepresentation(rep);
+		this->root.getCompactRepresentation(rep);
 
 		// Convert the hashList into a bytesVector. First pad it to a multiple of 8 bits.
 		if (rep.hashList.size() % 8 != 0) {
@@ -191,12 +189,7 @@ namespace libzerocash {
 		rep.hashListBytes.resize(ceil(rep.hashList.size() / 8.0));
 		convertVectorToBytesVector(rep.hashList, rep.hashListBytes);
 
-        return result;
-    }
-    IncrementalMerkleTreeCompact IncrementalMerkleTree::getCompactRepresentation(){
-    	IncrementalMerkleTreeCompact rep;
-    	this->getCompactRepresentation(rep);
-    	return rep;
+        return rep;
     }
 
     bool
@@ -447,23 +440,24 @@ namespace libzerocash {
         return (this->left->subtreeFull && this->right->subtreeFull);
     }
 
-    bool
+    void
     IncrementalMerkleNode::getCompactRepresentation(IncrementalMerkleTreeCompact &rep)
     {
         // Do nothing at the bottom level
         if (this->isLeaf()) {
-            return true;
+            return;
         }
 
         // There's no content below us. We're done
         if (!this->left) {
-            return true;
+            return;
         }
 
         // If we have no right elements, don't include any hashes. Recurse to the left.
         if (this->hasRightChildren() == false && this->left->isLeaf() == false && this->left->subtreeFull == false) {
             rep.hashList.at(this->nodeDepth) = false;
-            return this->left->getCompactRepresentation(rep);
+            this->left->getCompactRepresentation(rep);
+            return;
         }
 
         // Otherwise: Add our left child hash to the tree.
@@ -474,7 +468,8 @@ namespace libzerocash {
 
         // If we have a right child, recurse to the right
         if (this->hasRightChildren()) {
-            return this->right->getCompactRepresentation(rep);
+            this->right->getCompactRepresentation(rep);
+            return;
         }
 
         // We get here in one of the following cases:
@@ -486,8 +481,6 @@ namespace libzerocash {
         for (uint32_t i = this->nodeDepth + 1; i < this->treeHeight; i++) {
             rep.hashList.at(i) = false;
         }
-
-        return true;
     }
 
     bool

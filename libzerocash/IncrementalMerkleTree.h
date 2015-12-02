@@ -30,24 +30,29 @@ namespace libzerocash {
 /******************* Incremental Merkle tree compact *************************/
 
 class IncrementalMerkleTreeCompact {
+    friend class IncrementalMerkleTree;
+    friend class IncrementalMerkleNode;
 public:
-	uint32_t										treeHeight;
-    std::vector< std::vector<unsigned char> >   	hashVec;
-    std::vector< bool >								hashList;
-    std::vector< unsigned char >					hashListBytes;
-
-	IncrementalMerkleTreeCompact() : treeHeight(0) {}
-    void		clear() { hashVec.clear(); hashList.clear(); hashListBytes.clear(); treeHeight = 0; }
-    uint32_t	getHeight() { return this->treeHeight; }
+    uint32_t getHeight() { return this->treeHeight; }
 
     ADD_SERIALIZE_METHODS;
-
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-	 READWRITE(treeHeight);
-     READWRITE(hashVec);
-     READWRITE(hashListBytes);
+        READWRITE(treeHeight);
+        READWRITE(hashVec);
+        READWRITE(hashListBytes);
     }
+
+    uint32_t getTreeHeight() { return treeHeight; }
+    std::vector< std::vector<unsigned char> > const& getHashVec() { return hashVec; }
+    std::vector< bool > const& getHashList() { return hashList; }
+    std::vector< unsigned char > const& getHashListBytes() { return hashListBytes; }
+private:
+    IncrementalMerkleTreeCompact() : treeHeight(0) {}
+    uint32_t treeHeight;
+    std::vector< std::vector<unsigned char> > hashVec;
+    std::vector< bool > hashList;
+    std::vector< unsigned char > hashListBytes;
 };
 
 /********************* Incremental Merkle tree node **************************/
@@ -71,7 +76,7 @@ public:
     bool insertElement(const std::vector<bool> &hashV, std::vector<bool> &index);
     bool getWitness(const std::vector<bool> &index, merkle_authentication_path &witness);
     bool prune();
-    bool getCompactRepresentation(IncrementalMerkleTreeCompact &rep);
+    void getCompactRepresentation(IncrementalMerkleTreeCompact &rep);
     bool fromCompactRepresentation(IncrementalMerkleTreeCompact &rep, uint32_t pos);
 
     // Utility methods
@@ -109,7 +114,6 @@ public:
 	bool getRootValue(std::vector<unsigned char>& r);
 	std::vector<unsigned char>getRoot();
     bool prune();
-    bool getCompactRepresentation(IncrementalMerkleTreeCompact &rep);
     IncrementalMerkleTreeCompact getCompactRepresentation();
 
     bool fromCompactRepresentation(IncrementalMerkleTreeCompact &rep);

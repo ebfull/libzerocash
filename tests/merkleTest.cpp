@@ -114,10 +114,9 @@ BOOST_AUTO_TEST_CASE( testCompactRepresentation ) {
         BOOST_REQUIRE( incTree.insertVector(values) );
         BOOST_REQUIRE( incTree.prune() );
 
-        IncrementalMerkleTreeCompact compact;
-        BOOST_REQUIRE( incTree.getCompactRepresentation(compact) );
+        IncrementalMerkleTreeCompact compact = incTree.getCompactRepresentation();
 
-        BOOST_REQUIRE( compact.treeHeight == 64 );
+        BOOST_REQUIRE( compact.getTreeHeight() == 64 );
 
         // Calculate what the path to the next-added element should be.
         std::vector<unsigned char> path_bytes(8);
@@ -126,11 +125,11 @@ BOOST_AUTO_TEST_CASE( testCompactRepresentation ) {
         libzerocash::convertBytesVectorToVector(path_bytes, path_bits);
 
         // Make sure the paths match.
-        BOOST_REQUIRE( compact.hashList == path_bits );
-        BOOST_REQUIRE( compact.hashListBytes == path_bytes );
+        BOOST_REQUIRE( compact.getHashList() == path_bits );
+        BOOST_REQUIRE( compact.getHashListBytes() == path_bytes );
 
         // Make sure there's a hash for every '1' bit down the path.
-        BOOST_REQUIRE( compact.hashVec.size() == countOnes(path_bits) );
+        BOOST_REQUIRE( compact.getHashVec().size() == countOnes(path_bits) );
 
         // Make sure 'restoring' the tree results in the same root.
         IncrementalMerkleTree newTree(compact);

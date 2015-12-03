@@ -156,7 +156,7 @@ void convertIntToVector(uint64_t val, std::vector<bool>& v)
 
 uint64_t convertVectorToInt(const std::vector<bool>& v) {
     if (v.size() > 64) {
-        throw std::length_error ("boolean vector must be smaller than 64 bits");
+        throw std::length_error ("boolean vector can't be larger than 64 bits");
     }
 
     uint64_t result = 0;

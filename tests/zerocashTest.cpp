@@ -299,9 +299,15 @@ bool test_pour(libzerocash::ZerocashParams& p,
         pour_outputs.push_back(libzerocash::PourOutput(*it));
     }
 
-    libzerocash::PourTransaction pourtx(p, as, rt, pour_inputs, pour_outputs, vpub_in, vpub_out);
+    try {
+        libzerocash::PourTransaction pourtx(p, as, rt, pour_inputs, pour_outputs, vpub_in, vpub_out);
 
-    return pourtx.verify(p, as, rt);
+        assert(pourtx.verify(p, as, rt));
+
+        return true;
+    } catch(...) {
+        return false;
+    }
 }
 
 BOOST_AUTO_TEST_CASE( PourVpubInTest ) {
@@ -626,7 +632,7 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
     libzerocash::hashVectors(inter_1, inter_2, wit3);
 
     BOOST_CHECK(witness.size() == 64);
-    for (size_t i = 0; i < 61 /* 61 */; i++) {
+    for (size_t i = 0; i < 61; i++) {
         BOOST_CHECK(witness.at(i) == zeros);
     }
     BOOST_CHECK(

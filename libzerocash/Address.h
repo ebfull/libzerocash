@@ -23,7 +23,7 @@ namespace libzerocash {
 
 class PrivateAddress {
 public:
-    PrivateAddress();
+    PrivateAddress(const std::vector<unsigned char> a_sk, const std::string sk_enc);
 
     bool operator==(const PrivateAddress& rhs) const;
     bool operator!=(const PrivateAddress& rhs) const;
@@ -35,8 +35,6 @@ public:
         READWRITE(a_sk);
         READWRITE(sk_enc);
     }
-
-    void createPrivateAddress(const std::vector<unsigned char> a_sk, const std::string sk_enc);
 
     const std::vector<unsigned char>& getAddressSecret() const;
     const std::string getEncryptionSecretKey() const;
@@ -50,12 +48,8 @@ private:
 /***************************** Public address ********************************/
 
 class PublicAddress {
-
-friend class Address;
-friend class Coin;
-friend class PourTransaction;
-
 public:
+    // XXX: HACK: this is only here because of Coin's hacky non-constructor.
     PublicAddress();
     PublicAddress(const PrivateAddress& addr_sk);
 
@@ -70,21 +64,18 @@ public:
         READWRITE(pk_enc);
     }
 
+    const std::vector<unsigned char>& getPublicAddressSecret() const;
+    const std::string getEncryptionPublicKey() const;
+
 private:
     std::vector<unsigned char> a_pk;
     std::string pk_enc;
-
-    void createPublicAddress(const PrivateAddress& addr_sk);
-
-    const std::vector<unsigned char>& getPublicAddressSecret() const;
-    const std::string getEncryptionPublicKey() const;
 };
 
 /******************************** Address ************************************/
 
 class Address {
 public:
-    Address();
     Address(PrivateAddress&);
 
     const PublicAddress& getPublicAddress() const;
@@ -100,6 +91,8 @@ public:
         READWRITE(addr_pk);
         READWRITE(addr_sk);
     }
+
+    static Address CreateNewRandomAddress();
 
 private:
     PublicAddress addr_pk;

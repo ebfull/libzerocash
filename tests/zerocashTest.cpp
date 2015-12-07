@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_CASE( AddressTest ) {
     cout << "\nADDRESS TEST\n" << endl;
 
     libzerocash::timer_start("Address");
-    libzerocash::Address newAddress;
+    libzerocash::Address newAddress = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::timer_stop("Address");
 
     cout << "Successfully created an address.\n" << endl;
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE( AddressTest ) {
 
     cout << "Successfully serialized an address.\n" << endl;
 
-    libzerocash::Address addressNew;
+    libzerocash::Address addressNew = libzerocash::Address::CreateNewRandomAddress();
     serializedAddress >> addressNew;
     cout << "Successfully deserialized an address.\n" << endl;
 
@@ -118,11 +118,12 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     }
 
     vector<libzerocash::Coin> coins(5);
-    vector<libzerocash::Address> addrs(5);
+    vector<libzerocash::Address> addrs;
+    addrs.reserve(5);
 
     cout << "Creating Addresses and Coins...\n" << endl;
     for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address();
+        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
         coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
     }
     cout << "Successfully created address and coins.\n" << endl;
@@ -169,10 +170,10 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     cout << "Successfully created Witness 2.\n" << endl;
 
     cout << "Creating coins to spend...\n" << endl;
-    libzerocash::Address newAddress3;
+    libzerocash::Address newAddress3 = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress3 = newAddress3.getPublicAddress();
 
-    libzerocash::Address newAddress4;
+    libzerocash::Address newAddress4 = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress4 = newAddress4.getPublicAddress();
 
     libzerocash::Coin c_1_new(pubAddress3, 2);
@@ -222,7 +223,7 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
 BOOST_AUTO_TEST_CASE( CoinTest ) {
     cout << "\nCOIN TEST\n" << endl;
 
-    libzerocash::Address newAddress;
+    libzerocash::Address newAddress = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress = newAddress.getPublicAddress();
 
     libzerocash::Coin coin(pubAddress, 0);
@@ -265,7 +266,7 @@ BOOST_AUTO_TEST_CASE( CoinTest ) {
 BOOST_AUTO_TEST_CASE( MintTxTest ) {
     cout << "\nMINT TRANSACTION TEST\n" << endl;
 
-    libzerocash::Address newAddress;
+    libzerocash::Address newAddress = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress = newAddress.getPublicAddress();
 
     vector<unsigned char> value(v_size, 0);
@@ -315,10 +316,11 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
     cout << "Successfully created Params.\n" << endl;
 
     vector<libzerocash::Coin> coins(5);
-    vector<libzerocash::Address> addrs(5);
+    vector<libzerocash::Address> addrs;
+    addrs.reserve(5);
 
     for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address();
+        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
         coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
     }
 
@@ -369,10 +371,10 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
     }
     cout << "\n" << endl;
 
-    libzerocash::Address newAddress3;
+    libzerocash::Address newAddress3 = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress3 = newAddress3.getPublicAddress();
 
-    libzerocash::Address newAddress4;
+    libzerocash::Address newAddress4 = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress4 = newAddress4.getPublicAddress();
 
     libzerocash::Coin c_1_new(pubAddress3, 2);
@@ -419,12 +421,13 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
     cout << "\nMERKLE TREE SIMPLE TEST\n" << endl;
 
     vector<libzerocash::Coin> coins(5);
-    vector<libzerocash::Address> addrs(5);
+    vector<libzerocash::Address> addrs;
+    addrs.reserve(5);
 
     cout << "Creating coins...\n" << endl;
 
     for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address();
+        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
         coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
     }
 
@@ -531,11 +534,12 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     libzerocash::timer_stop("Param Generation");
 
     vector<libzerocash::Coin> coins(5);
-    vector<libzerocash::Address> addrs(5);
+    vector<libzerocash::Address> addrs;
+    addrs.reserve(5);
 
     cout << "Creating Addresses and Coins...\n" << endl;
     for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address();
+        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
         coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
     }
     cout << "Successfully created address and coins.\n" << endl;
@@ -586,10 +590,10 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     cout << "Successfully created Witness 2.\n" << endl;
 
     cout << "Creating coins to spend...\n" << endl;
-    libzerocash::Address newAddress3;
+    libzerocash::Address newAddress3 = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress3 = newAddress3.getPublicAddress();
 
-    libzerocash::Address newAddress4;
+    libzerocash::Address newAddress4 = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress4 = newAddress4.getPublicAddress();
 
     libzerocash::Coin c_1_new(pubAddress3, 2);

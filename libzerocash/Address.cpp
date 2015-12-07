@@ -30,11 +30,7 @@ using CryptoPP::StringStore;
 
 namespace libzerocash {
 
-PrivateAddress::PrivateAddress() {
-    this->sk_enc = "";
-}
-
-void PrivateAddress::createPrivateAddress(const std::vector<unsigned char> a_sk, const std::string sk_enc) {
+PrivateAddress::PrivateAddress(const std::vector<unsigned char> a_sk, const std::string sk_enc) {
     this->a_sk = a_sk;
     this->sk_enc = sk_enc;
 }
@@ -55,15 +51,12 @@ const std::vector<unsigned char>& PrivateAddress::getAddressSecret() const {
     return this->a_sk;
 }
 
+// XXX: HACK: get rid of me.
 PublicAddress::PublicAddress(): a_pk(a_pk_size) {
     this->pk_enc = "";
 }
 
 PublicAddress::PublicAddress(const PrivateAddress& addr_sk): a_pk(a_pk_size) {
-    createPublicAddress(addr_sk);
-}
-
-void PublicAddress::createPublicAddress(const PrivateAddress& addr_sk) {
     std::vector<bool> a_sk_bool(a_sk_size * 8);
     convertBytesVectorToVector(addr_sk.getAddressSecret(), a_sk_bool);
 
@@ -106,32 +99,8 @@ bool PublicAddress::operator!=(const PublicAddress& rhs) const {
 	return !(*this == rhs);
 }
 
-Address::Address(PrivateAddress& priv) {
-    addr_sk = priv;
+Address::Address(PrivateAddress& priv) : addr_pk(priv), addr_sk(priv) {
 
-    PublicAddress pubaddr(addr_sk);
-
-    addr_pk = pubaddr;
-}
-
-Address::Address(): addr_pk(), addr_sk() {
-    std::vector<unsigned char> a_sk(a_sk_size);
-
-    unsigned char a_sk_bytes[a_sk_size];
-    getRandBytes(a_sk_bytes, a_sk_size);
-    convertBytesToBytesVector(a_sk_bytes, a_sk);
-
-    AutoSeededRandomPool prng;
-
-    ECIES<ECP>::PrivateKey privateKey;
-    privateKey.Initialize(prng, ASN1::secp256r1());
-
-    std::string encodedPrivateKey;
-
-    privateKey.Save(StringSink(encodedPrivateKey).Ref());
-
-    addr_sk.createPrivateAddress(a_sk, encodedPrivateKey);
-    addr_pk.createPublicAddress(addr_sk);
 }
 
 const PublicAddress& Address::getPublicAddress() const {
@@ -148,6 +117,26 @@ bool Address::operator==(const Address& rhs) const {
 
 bool Address::operator!=(const Address& rhs) const {
 	return !(*this == rhs);
+}
+
+Address Address::CreateNewRandomAddress() {
+    std::vector<unsigned char> a_sk(a_sk_size);
+
+    unsigned char a_sk_bytes[a_sk_size];
+    getRandBytes(a_sk_bytes, a_sk_size);
+    convertBytesToBytesVector(a_sk_bytes, a_sk);
+
+    AutoSeededRandomPool prng;
+
+    ECIES<ECP>::PrivateKey privateKey;
+    privateKey.Initialize(prng, ASN1::secp256r1());
+
+    std::string encodedPrivateKey;
+
+    privateKey.Save(StringSink(encodedPrivateKey).Ref());
+
+    PrivateAddress addr_sk(a_sk, encodedPrivateKey);
+    return Address(addr_sk);
 }
 
 } /* namespace libzerocash */

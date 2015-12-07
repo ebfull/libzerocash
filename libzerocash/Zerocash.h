@@ -15,6 +15,7 @@
 #include <stdexcept>
 #include <vector>
 
+/* The version of this library. */
 #define ZEROCASH_VERSION_STRING             "0.1"
 #define ZEROCASH_VERSION_INT				1
 #define ZEROCASH_PROTOCOL_VERSION           "1"

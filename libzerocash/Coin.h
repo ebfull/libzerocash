@@ -28,6 +28,7 @@ friend class MintTransaction;
 friend class PourTransaction;
 
 public:
+    /* This constructor is to be used ONLY for deserialization. */
 	Coin();
 	/**
 	 * @param addr the address the coin will belong to when minted or poured into

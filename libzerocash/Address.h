@@ -23,6 +23,8 @@ namespace libzerocash {
 
 class PrivateAddress {
 public:
+    /* This constructor is to be used ONLY for deserialization. */
+    PrivateAddress();
     PrivateAddress(const std::vector<unsigned char> a_sk, const std::string sk_enc);
 
     bool operator==(const PrivateAddress& rhs) const;
@@ -49,7 +51,7 @@ private:
 
 class PublicAddress {
 public:
-    // XXX: HACK: this is only here because of Coin's hacky non-constructor.
+    /* This constructor is to be used ONLY for deserialization. */
     PublicAddress();
     PublicAddress(const PrivateAddress& addr_sk);
 
@@ -76,6 +78,8 @@ private:
 
 class Address {
 public:
+    /* This constructor is to be used ONLY for deserialization. */
+    Address();
     Address(PrivateAddress&);
 
     const PublicAddress& getPublicAddress() const;

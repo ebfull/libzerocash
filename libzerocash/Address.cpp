@@ -35,6 +35,10 @@ PrivateAddress::PrivateAddress(const std::vector<unsigned char> a_sk, const std:
     this->sk_enc = sk_enc;
 }
 
+PrivateAddress::PrivateAddress() {
+
+}
+
 bool PrivateAddress::operator==(const PrivateAddress& rhs) const {
 	return ((this->a_sk == rhs.a_sk) && (this->sk_enc == rhs.sk_enc));
 }
@@ -51,7 +55,6 @@ const std::vector<unsigned char>& PrivateAddress::getAddressSecret() const {
     return this->a_sk;
 }
 
-// XXX: HACK: get rid of me.
 PublicAddress::PublicAddress(): a_pk(a_pk_size) {
     this->pk_enc = "";
 }
@@ -100,6 +103,10 @@ bool PublicAddress::operator!=(const PublicAddress& rhs) const {
 }
 
 Address::Address(PrivateAddress& priv) : addr_pk(priv), addr_sk(priv) {
+
+}
+
+Address::Address() : addr_pk(), addr_sk() {
 
 }
 

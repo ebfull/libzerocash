@@ -22,7 +22,7 @@ using namespace libzerocash;
 
 int main(int argc, char **argv)
 {
-    if(argc < 2 || argc > 4) {
+    if(argc != 4) {
         std::cerr << "Usage: " << argv[0] << " treeDepth provingKeyFileName verificationKeyFileName" << std::endl;
         return 1;
     }

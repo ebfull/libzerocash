@@ -30,9 +30,6 @@ public:
 	CoinCommitment(const std::vector<unsigned char>& val,
                    const std::vector<unsigned char>& k);
 
-	void constructCommitment(const std::vector<unsigned char>& val,
-                             const std::vector<unsigned char>& k);
-
     const std::vector<unsigned char>& getCommitmentValue() const;
 
 	bool operator==(const CoinCommitment& rhs) const;

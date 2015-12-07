@@ -25,13 +25,6 @@ CoinCommitment::CoinCommitment() : commitmentValue(cm_size)
 CoinCommitment::CoinCommitment(const std::vector<unsigned char>& val,
                                const std::vector<unsigned char>& k) : commitmentValue(cm_size)
 {
-	this->constructCommitment(val, k);
-}
-
-void
-CoinCommitment::constructCommitment(const std::vector<unsigned char>& val,
-                                    const std::vector<unsigned char>& k)
-{
 	std::vector<bool> zeros_192(192, 0);
     std::vector<bool> cm_internal;
     std::vector<bool> value_bool(v_size * 8, 0);

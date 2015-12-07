@@ -43,12 +43,13 @@ public:
 
     void createPrivateAddress(const std::vector<unsigned char> a_sk, const std::string sk_enc);
 
+    const std::vector<unsigned char>& getAddressSecret() const;
+    const std::string getEncryptionSecretKey() const;
+
 private:
     std::vector<unsigned char> a_sk;
     std::string sk_enc;
 
-    const std::vector<unsigned char>& getAddressSecret() const;
-    const std::string getEncryptionSecretKey() const;
 };
 
 /***************************** Public address ********************************/
@@ -61,7 +62,7 @@ friend class PourTransaction;
 
 public:
     PublicAddress();
-    PublicAddress(const std::vector<unsigned char>& a_sk, const std::string sk_enc);
+    PublicAddress(const PrivateAddress& addr_sk);
 
     bool operator==(const PublicAddress& rhs) const;
     bool operator!=(const PublicAddress& rhs) const;
@@ -78,7 +79,7 @@ private:
     std::vector<unsigned char> a_pk;
     std::string pk_enc;
 
-    void createPublicAddress(const std::vector<unsigned char>& a_sk, const std::string sk_enc);
+    void createPublicAddress(const PrivateAddress& addr_sk);
 
     const std::vector<unsigned char>& getPublicAddressSecret() const;
 

@@ -59,13 +59,13 @@ PublicAddress::PublicAddress(): a_pk(a_pk_size) {
     this->pk_enc = "";
 }
 
-PublicAddress::PublicAddress(const std::vector<unsigned char>& a_sk, const std::string sk_enc): a_pk(a_pk_size) {
-    createPublicAddress(a_sk, sk_enc);
+PublicAddress::PublicAddress(const PrivateAddress& addr_sk): a_pk(a_pk_size) {
+    createPublicAddress(addr_sk);
 }
 
-void PublicAddress::createPublicAddress(const std::vector<unsigned char>& a_sk, const std::string sk_enc) {
+void PublicAddress::createPublicAddress(const PrivateAddress& addr_sk) {
     std::vector<bool> a_sk_bool(a_sk_size * 8);
-    convertBytesVectorToVector(a_sk, a_sk_bool);
+    convertBytesVectorToVector(addr_sk.getAddressSecret(), a_sk_bool);
 
     std::vector<bool> zeros_256(256, 0);
 
@@ -80,7 +80,7 @@ void PublicAddress::createPublicAddress(const std::vector<unsigned char>& a_sk, 
     ECIES<ECP>::PublicKey publicKey;
 
     ECIES<ECP>::PrivateKey decodedPrivateKey;
-    decodedPrivateKey.Load(StringStore(sk_enc).Ref());
+    decodedPrivateKey.Load(StringStore(addr_sk.getEncryptionSecretKey()).Ref());
 
     decodedPrivateKey.MakePublicKey(publicKey);
 
@@ -109,7 +109,7 @@ bool PublicAddress::operator!=(const PublicAddress& rhs) const {
 Address::Address(PrivateAddress& priv) {
     addr_sk = priv;
 
-    PublicAddress pubaddr(priv.getAddressSecret(), priv.getEncryptionSecretKey());
+    PublicAddress pubaddr(addr_sk);
 
     addr_pk = pubaddr;
 }
@@ -130,8 +130,8 @@ Address::Address(): addr_pk(), addr_sk() {
 
     privateKey.Save(StringSink(encodedPrivateKey).Ref());
 
-    addr_pk.createPublicAddress(a_sk, encodedPrivateKey);
     addr_sk.createPrivateAddress(a_sk, encodedPrivateKey);
+    addr_pk.createPublicAddress(addr_sk);
 }
 
 const PublicAddress& Address::getPublicAddress() const {

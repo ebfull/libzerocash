@@ -23,7 +23,6 @@
 #include "libzerocash/CoinCommitment.h"
 #include "libzerocash/Coin.h"
 #include "libzerocash/IncrementalMerkleTree.h"
-#include "libzerocash/MerkleTree.h"
 #include "libzerocash/MintTransaction.h"
 #include "libzerocash/PourTransaction.h"
 #include "libzerocash/utils/util.h"
@@ -163,17 +162,17 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     }
 
     cout << "Creating Merkle Tree...\n" << endl;
-    libzerocash::MerkleTree merkleTree(coinValues, TEST_TREE_DEPTH);
+    libzerocash::IncrementalMerkleTree merkleTree(coinValues, TEST_TREE_DEPTH);
     cout << "Successfully created Merkle Tree.\n" << endl;
 
     cout << "Creating Witness 1...\n" << endl;
     merkle_authentication_path witness_1(TEST_TREE_DEPTH);
-    merkleTree.getWitness(coinValues.at(1), witness_1);
+    merkleTree.getWitness(convertIntToVector(1), witness_1);
     cout << "Successfully created Witness 1.\n" << endl;
 
     cout << "Creating Witness 2...\n" << endl;
     merkle_authentication_path witness_2(TEST_TREE_DEPTH);
-    merkleTree.getWitness(coinValues.at(3), witness_2);
+    merkleTree.getWitness(convertIntToVector(3), witness_2);
     cout << "Successfully created Witness 2.\n" << endl;
 
     cout << "Creating coins to spend...\n" << endl;
@@ -187,11 +186,13 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     libzerocash::Coin c_2_new(pubAddress4, 2);
     cout << "Successfully created coins to spend.\n" << endl;
 
-    vector<bool> root_bv(root_size * 8);
-    merkleTree.getRootValue(root_bv);
     vector<unsigned char> rt(root_size);
-    libzerocash::convertVectorToBytesVector(root_bv, rt);
+    merkleTree.getRootValue(rt);
 
+    // XXX: debugging
+    std::cout << "Root: " << rt.size() << endl;
+    std::cout << "wit1: " << witness_1.size() << endl;
+    std::cout << "wit2: " << witness_1.size() << endl;
 
     vector<unsigned char> as(sig_pk_size, 'a');
 
@@ -451,12 +452,6 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
 	libzerocash::printVectorAsHex(root);
 	cout << endl;
 
-	libzerocash::MerkleTree christinaTree(coinValues, 16);
-	christinaTree.getRootValue(root);
-	cout << "Christina root: ";
-	libzerocash::printVectorAsHex(root);
-	cout << endl;
-
     cout << "Successfully created Merkle Tree.\n" << endl;
 
 	cout << "Copying and pruning Merkle Tree...\n" << endl;
@@ -503,17 +498,6 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
     }
     cout << "\n" << endl;
 
-    merkle_authentication_path christina_witness(16);
-	christinaTree.getWitness(coinValues.at(3), christina_witness);
-
-    cout << "Christina created witness.\n" << endl;
-
-    cout << "Christina Witness: " << endl;
-    for(size_t i = 0; i < christina_witness.size(); i++) {
-        libzerocash::printVectorAsHex(christina_witness.at(i));
-    }
-    cout << "\n" << endl;
-
     vector<bool> wit1(SHA256_BLOCK_SIZE * 8);
     vector<bool> wit2(SHA256_BLOCK_SIZE * 8);
     vector<bool> wit3(SHA256_BLOCK_SIZE * 8);
@@ -526,16 +510,6 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
     libzerocash::hashVectors(coinValues.at(4), zeros, inter_1);
     inter_2 = zeros;
     libzerocash::hashVectors(inter_1, inter_2, wit3);
-
-    BOOST_CHECK(christina_witness.size() == 16);
-    for (size_t i = 0; i < 13; i++) {
-        BOOST_CHECK(christina_witness.at(i) == zeros);
-    }
-    BOOST_CHECK(
-        (christina_witness.at(13) == wit3) &&
-        (christina_witness.at(14) == wit2) &&
-        (christina_witness.at(15) == wit1)
-    );
 
     BOOST_CHECK(witness.size() == 64);
     for (size_t i = 0; i < 61 /* 61 */; i++) {

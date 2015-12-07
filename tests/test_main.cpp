@@ -23,7 +23,6 @@ using namespace std;
 #include "libzerocash/Address.h"
 #include "libzerocash/CoinCommitment.h"
 #include "libzerocash/Coin.h"
-#include "libzerocash/MerkleTree.h"
 #include "libzerocash/MintTransaction.h"
 #include "libzerocash/PourTransaction.h"
 

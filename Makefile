@@ -32,9 +32,7 @@ LIBPATH = /usr/local/lib
 SRCS= \
 	$(UTILS)/sha256.cpp \
 	$(UTILS)/util.cpp \
-	$(LIBZEROCASH)/Node.cpp \
 	$(LIBZEROCASH)/IncrementalMerkleTree.cpp \
-	$(LIBZEROCASH)/MerkleTree.cpp \
 	$(LIBZEROCASH)/Address.cpp \
 	$(LIBZEROCASH)/CoinCommitment.cpp \
 	$(LIBZEROCASH)/Coin.cpp \

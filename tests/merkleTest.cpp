@@ -10,7 +10,6 @@
  *****************************************************************************/
 
 #include "libzerocash/IncrementalMerkleTree.h"
-#include "libzerocash/MerkleTree.h"
 
 #include <iostream>
 #include <vector>
@@ -57,11 +56,10 @@ size_t countOnes(std::vector<bool> bits)
     return count;
 }
 
-BOOST_AUTO_TEST_CASE( testRootConsistencyZeroValues ) {
+BOOST_AUTO_TEST_CASE( testRootOfTreeOfZerosIsZero ) {
     IncrementalMerkleTree incTree;
     std::vector< std::vector<bool> > values;
-    std::vector<bool> root1;
-    std::vector<bool> root2;
+    std::vector<bool> actual_root;
 
     constructZeroTestVector(values, 2);
 
@@ -70,21 +68,16 @@ BOOST_AUTO_TEST_CASE( testRootConsistencyZeroValues ) {
         BOOST_ERROR("Could not insert into the tree.");
     }
     incTree.prune();
+    incTree.getRootValue(actual_root);
 
-    // Create a MerkleTree over the values.
-    MerkleTree oldTree(values);
-
-    incTree.getRootValue(root1);
-    oldTree.getRootValue(root2);
-
-    BOOST_CHECK( root1 == root2 );
+    std::vector<bool> expected_root(32*8, 0);
+    BOOST_CHECK( expected_root == actual_root );
 }
 
-BOOST_AUTO_TEST_CASE( testRootConsistencyNonzeroValues ) {
+BOOST_AUTO_TEST_CASE( testRootOfTreeOfNonZeroIsNonZero ) {
     IncrementalMerkleTree incTree;
     std::vector< std::vector<bool> > values;
-    std::vector<bool> root1;
-    std::vector<bool> root2;
+    std::vector<bool> actual_root;
 
     constructNonzeroTestVector(values, 2);
 
@@ -93,14 +86,10 @@ BOOST_AUTO_TEST_CASE( testRootConsistencyNonzeroValues ) {
         BOOST_ERROR("Could not insert into the tree.");
     }
     incTree.prune();
+    incTree.getRootValue(actual_root);
 
-    // Create a MerkleTree over the values.
-    MerkleTree oldTree(values);
-
-    incTree.getRootValue(root1);
-    oldTree.getRootValue(root2);
-
-    BOOST_CHECK( root1 == root2 );
+    std::vector<bool> expected_root(32*8, 0);
+    BOOST_CHECK( expected_root != actual_root );
 }
 
 BOOST_AUTO_TEST_CASE( testCompactRepresentation ) {

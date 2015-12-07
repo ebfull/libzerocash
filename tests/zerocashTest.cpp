@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     bool minttx_res = minttxNew.verify();
 
     vector<std::vector<bool>> coinValues(5);
-    vector<bool> temp_comVal(cm_size * 8);
+    vector<bool> temp_comVal(ZEROCASH_CM_SIZE * 8);
     for(size_t i = 0; i < coinValues.size(); i++) {
         libzerocash::convertBytesVectorToVector(coins.at(i).getCoinCommitment().getCommitmentValue(), temp_comVal);
         coinValues.at(i) = temp_comVal;
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     libzerocash::Coin c_2_new(pubAddress4, 2);
     cout << "Successfully created coins to spend.\n" << endl;
 
-    vector<unsigned char> rt(root_size);
+    vector<unsigned char> rt(ZEROCASH_ROOT_SIZE);
     merkleTree.getRootValue(rt);
 
     // XXX: debugging
@@ -187,7 +187,7 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     std::cout << "wit1: " << witness_1.size() << endl;
     std::cout << "wit2: " << witness_1.size() << endl;
 
-    vector<unsigned char> as(sig_pk_size, 'a');
+    vector<unsigned char> as(ZEROCASH_SIG_PK_SIZE, 'a');
 
     cout << "Creating a pour transaction...\n" << endl;
     libzerocash::PourTransaction pourtx(1, p,
@@ -211,7 +211,7 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     serializedPourTx >> pourtxNew;
     cout << "Successfully deserialized a pour transaction.\n" << endl;
 
-	std::vector<unsigned char> pubkeyHash(sig_pk_size, 'a');
+	std::vector<unsigned char> pubkeyHash(ZEROCASH_SIG_PK_SIZE, 'a');
 
     cout << "Verifying a pour transaction...\n" << endl;
     bool pourtx_res = pourtxNew.verify(p, pubkeyHash, rt);
@@ -268,7 +268,7 @@ BOOST_AUTO_TEST_CASE( MintTxTest ) {
     libzerocash::Address newAddress = libzerocash::Address::CreateNewRandomAddress();
     libzerocash::PublicAddress pubAddress = newAddress.getPublicAddress();
 
-    vector<unsigned char> value(v_size, 0);
+    vector<unsigned char> value(ZEROCASH_V_SIZE, 0);
 
     libzerocash::timer_start("Coin");
     const libzerocash::Coin coin(pubAddress, 0);
@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
 
     vector<std::vector<bool>> coinValues(5);
 
-    vector<bool> temp_comVal(cm_size * 8);
+    vector<bool> temp_comVal(ZEROCASH_CM_SIZE * 8);
     for(size_t i = 0; i < coinValues.size(); i++) {
         libzerocash::convertBytesVectorToVector(coins.at(i).getCoinCommitment().getCommitmentValue(), temp_comVal);
         coinValues.at(i) = temp_comVal;
@@ -378,14 +378,14 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
     libzerocash::Coin c_1_new(pubAddress3, 2);
     libzerocash::Coin c_2_new(pubAddress4, 2);
 
-    vector<bool> root_bv(root_size * 8);
+    vector<bool> root_bv(ZEROCASH_ROOT_SIZE * 8);
     merkleTree.getRootValue(root_bv);
-    vector<unsigned char> rt(root_size);
+    vector<unsigned char> rt(ZEROCASH_ROOT_SIZE);
     libzerocash::convertVectorToBytesVector(root_bv, rt);
 
-    vector<unsigned char> ones(v_size, 1);
-    vector<unsigned char> twos(v_size, 2);
-    vector<unsigned char> as(sig_pk_size, 'a');
+    vector<unsigned char> ones(ZEROCASH_V_SIZE, 1);
+    vector<unsigned char> twos(ZEROCASH_V_SIZE, 2);
+    vector<unsigned char> as(ZEROCASH_SIG_PK_SIZE, 'a');
 
     cout << "Creating a pour transaction...\n" << endl;
 
@@ -406,7 +406,7 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
 
     cout << "Successfully deserialized a pour transaction.\n" << endl;
 
-	std::vector<unsigned char> pubkeyHash(sig_pk_size, 'a');
+	std::vector<unsigned char> pubkeyHash(ZEROCASH_SIG_PK_SIZE, 'a');
 
     libzerocash::timer_start("Pour Transaction Verify");
     bool pourtx_res = pourtxNew.verify(p, pubkeyHash, rt);
@@ -432,7 +432,7 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
 
     vector<std::vector<bool>> coinValues(coins.size());
 
-    vector<bool> temp_comVal(cm_size * 8);
+    vector<bool> temp_comVal(ZEROCASH_CM_SIZE * 8);
     for(size_t i = 0; i < coinValues.size(); i++) {
         libzerocash::convertBytesVectorToVector(coins.at(i).getCoinCommitment().getCommitmentValue(), temp_comVal);
         coinValues.at(i) = temp_comVal;
@@ -557,7 +557,7 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     bool minttx_res = minttxNew.verify();
 
     vector<std::vector<bool>> coinValues(5);
-    vector<bool> temp_comVal(cm_size * 8);
+    vector<bool> temp_comVal(ZEROCASH_CM_SIZE * 8);
     for(size_t i = 0; i < coinValues.size(); i++) {
         libzerocash::convertBytesVectorToVector(coins.at(i).getCoinCommitment().getCommitmentValue(), temp_comVal);
         coinValues.at(i) = temp_comVal;
@@ -596,13 +596,13 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     libzerocash::Coin c_2_new(pubAddress4, 2);
     cout << "Successfully created coins to spend.\n" << endl;
 
-    vector<bool> root_bv(root_size * 8);
+    vector<bool> root_bv(ZEROCASH_ROOT_SIZE * 8);
     merkleTree.getRootValue(root_bv);
-    vector<unsigned char> rt(root_size);
+    vector<unsigned char> rt(ZEROCASH_ROOT_SIZE);
     libzerocash::convertVectorToBytesVector(root_bv, rt);
 
 
-    vector<unsigned char> as(sig_pk_size, 'a');
+    vector<unsigned char> as(ZEROCASH_SIG_PK_SIZE, 'a');
 
     cout << "Creating a pour transaction...\n" << endl;
     libzerocash::PourTransaction pourtx(1, p,
@@ -626,7 +626,7 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     serializedPourTx >> pourtxNew;
     cout << "Successfully deserialized a pour transaction.\n" << endl;
 
-	std::vector<unsigned char> pubkeyHash(sig_pk_size, 'a');
+	std::vector<unsigned char> pubkeyHash(ZEROCASH_SIG_PK_SIZE, 'a');
 
     cout << "Verifying a pour transaction...\n" << endl;
     bool pourtx_res = pourtxNew.verify(p, pubkeyHash, rt);

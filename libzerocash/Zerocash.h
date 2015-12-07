@@ -21,32 +21,32 @@
 #define ZEROCASH_PROTOCOL_VERSION           "1"
 #define ZEROCASH_DEFAULT_TREE_SIZE          64
 
-#define a_pk_size       32
-#define pk_enc_size     311
-#define sig_pk_size		32
-#define addr_pk_size    (a_pk_size+pk_enc_size)
+#define ZEROCASH_A_PK_SIZE       32
+#define ZEROCASH_PK_ENC_SIZE     311
+#define ZEROCASH_SIG_PK_SIZE		32
+#define ZEROCASH_ADDR_PK_SIZE    (ZEROCASH_A_PK_SIZE+ZEROCASH_PK_ENC_SIZE)
 
-#define a_sk_size       32
-#define sk_enc_size     287
-#define addr_sk_size    (a_sk_size+sk_enc_size)
+#define ZEROCASH_A_SK_SIZE       32
+#define ZEROCASH_SK_ENC_SIZE     287
+#define ZEROCASH_ADDR_SK_SIZE    (ZEROCASH_A_SK_SIZE+ZEROCASH_SK_ENC_SIZE)
 
-#define v_size          8
-#define rho_size        32
-#define zc_r_size       48 // renaming to avoid conflict with BOOST names
-#define s_size          0
-#define k_size          32
-#define cm_size         32
-#define coin_size       (addr_pk_size+v_size+rho_size+r_size+s_size+cm_size)
-#define tx_mint_size    (cm_size+v_size+k_size+s_size)
+#define ZEROCASH_V_SIZE          8
+#define ZEROCASH_RHO_SIZE        32
+#define ZEROCASH_R_SIZE          48
+#define ZEROCASH_S_SIZE          0
+#define ZEROCASH_K_SIZE          32
+#define ZEROCASH_CM_SIZE         32
+#define ZEROCASH_COIN_SIZE       (ZEROCASH_ADDR_PK_SIZE+ZEROCASH_V_SIZE+ZEROCASH_RHO_SIZE+ZEROCASH_R_SIZE+ZEROCASH_S_SIZE+ZEROCASH_CM_SIZE)
+#define ZEROCASH_TX_MINT_SIZE    (ZEROCASH_CM_SIZE+ZEROCASH_V_SIZE+ZEROCASH_K_SIZE+ZEROCASH_S_SIZE)
 
-#define root_size       32
-#define sn_size         32
-#define pk_sig_size     66
-#define h_size          32
-#define zerocash_pour_proof_size 288
-#define C_size          173
-#define sigma_size      72
-#define tx_pour_size    (root_size+(2*sn_size)+(2*cm_size)+v_size+pk_sig_size+(2*h_size)+zerocash_pour_proof_size+(2*C_size)+sigma_size)
+#define ZEROCASH_ROOT_SIZE       32
+#define ZEROCASH_SN_SIZE         32
+#define ZEROCASH_PK_SIG_SIZE     66
+#define ZEROCASH_H_SIZE          32
+#define ZEROCASH_POUR_PROOF_SIZE 288
+#define ZEROCASH_C_SIZE          173
+#define ZEROCASH_SIGMA_SIZE      72
+#define ZEROCASH_TX_POUR_SIZE    (ZEROCASH_ROOT_SIZE+(2*ZEROCASH_SN_SIZE)+(2*ZEROCASH_CM_SIZE)+ZEROCASH_V_SIZE+ZEROCASH_PK_SIG_SIZE+(2*ZEROCASH_H_SIZE)+ZEROCASH_POUR_PROOF_SIZE+(2*ZEROCASH_C_SIZE)+ZEROCASH_SIGMA_SIZE)
 
 #define SNARK
 

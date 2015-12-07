@@ -19,18 +19,18 @@
 
 namespace libzerocash {
 
-CoinCommitment::CoinCommitment() : commitmentValue(cm_size)
+CoinCommitment::CoinCommitment() : commitmentValue(ZEROCASH_CM_SIZE)
 { }
 
 CoinCommitment::CoinCommitment(const std::vector<unsigned char>& val,
-                               const std::vector<unsigned char>& k) : commitmentValue(cm_size)
+                               const std::vector<unsigned char>& k) : commitmentValue(ZEROCASH_CM_SIZE)
 {
 	std::vector<bool> zeros_192(192, 0);
     std::vector<bool> cm_internal;
-    std::vector<bool> value_bool(v_size * 8, 0);
-    std::vector<bool> k_bool(k_size * 8, 0);
+    std::vector<bool> value_bool(ZEROCASH_V_SIZE * 8, 0);
+    std::vector<bool> k_bool(ZEROCASH_K_SIZE * 8, 0);
 
-	if (val.size() > v_size || k.size() > k_size) {
+	if (val.size() > ZEROCASH_V_SIZE || k.size() > ZEROCASH_K_SIZE) {
 		throw std::runtime_error("CoinCommitment: inputs are too large");
 	}
 
@@ -38,7 +38,7 @@ CoinCommitment::CoinCommitment(const std::vector<unsigned char>& val,
     libzerocash::convertBytesVectorToVector(k, k_bool);
 
     libzerocash::concatenateVectors(k_bool, zeros_192, value_bool, cm_internal);
-    std::vector<bool> cm_bool(cm_size * 8);
+    std::vector<bool> cm_bool(ZEROCASH_CM_SIZE * 8);
     libzerocash::hashVector(cm_internal, cm_bool);
     libzerocash::convertVectorToBytesVector(cm_bool, this->commitmentValue);
 }

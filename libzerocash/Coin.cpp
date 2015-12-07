@@ -32,11 +32,11 @@ using CryptoPP::StringStore;
 
 namespace libzerocash {
 
-Coin::Coin(): addr_pk(), cm(), rho(rho_size), r(zc_r_size), coinValue(v_size) {
+Coin::Coin(): addr_pk(), cm(), rho(ZEROCASH_RHO_SIZE), r(ZEROCASH_R_SIZE), coinValue(ZEROCASH_V_SIZE) {
 
 }
 
-Coin::Coin(const std::string bucket, Address& addr): addr_pk(), cm(), rho(rho_size), r(zc_r_size), coinValue(v_size) {
+Coin::Coin(const std::string bucket, Address& addr): addr_pk(), cm(), rho(ZEROCASH_RHO_SIZE), r(ZEROCASH_R_SIZE), coinValue(ZEROCASH_V_SIZE) {
     // Retreive and decode the private key
     ECIES<ECP>::PrivateKey decodedPrivateKey;
     decodedPrivateKey.Load(StringStore(addr.getPrivateAddress().getEncryptionSecretKey()).Ref());
@@ -52,21 +52,21 @@ Coin::Coin(const std::string bucket, Address& addr): addr_pk(), cm(), rho(rho_si
     // to store the plaintext if it were extended beyond the real size.
     std::vector<unsigned char> plaintext;
     // Size as needed, filling with zeros.
-    plaintext.resize(decrypt.MaxPlaintextLength(decrypt.CiphertextLength(v_size + zc_r_size + rho_size)), 0);
+    plaintext.resize(decrypt.MaxPlaintextLength(decrypt.CiphertextLength(ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE)), 0);
 
     // Perform the decryption
     decrypt.Decrypt(prng,
                     &bucket_bytes[0],
-                    decrypt.CiphertextLength(v_size + zc_r_size + rho_size),
+                    decrypt.CiphertextLength(ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE),
                     &plaintext[0]);
 
     // Grab the byte vectors
     std::vector<unsigned char> value_v(plaintext.begin(),
-                                       plaintext.begin() + v_size);
-    std::vector<unsigned char>     r_v(plaintext.begin() + v_size,
-                                       plaintext.begin() + v_size + zc_r_size);
-    std::vector<unsigned char>   rho_v(plaintext.begin() + v_size + zc_r_size,
-                                       plaintext.begin() + v_size + zc_r_size + rho_size);
+                                       plaintext.begin() + ZEROCASH_V_SIZE);
+    std::vector<unsigned char>     r_v(plaintext.begin() + ZEROCASH_V_SIZE,
+                                       plaintext.begin() + ZEROCASH_V_SIZE + ZEROCASH_R_SIZE);
+    std::vector<unsigned char>   rho_v(plaintext.begin() + ZEROCASH_V_SIZE + ZEROCASH_R_SIZE,
+                                       plaintext.begin() + ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE);
 
     this->coinValue = value_v;
     this->r = r_v;
@@ -78,18 +78,18 @@ Coin::Coin(const std::string bucket, Address& addr): addr_pk(), cm(), rho(rho_si
     this->computeCommitments(a_pk);
 }
 
-Coin::Coin(const PublicAddress& addr, uint64_t value): addr_pk(addr), cm(), rho(rho_size), r(zc_r_size), k(k_size), coinValue(v_size)
+Coin::Coin(const PublicAddress& addr, uint64_t value): addr_pk(addr), cm(), rho(ZEROCASH_RHO_SIZE), r(ZEROCASH_R_SIZE), k(ZEROCASH_K_SIZE), coinValue(ZEROCASH_V_SIZE)
 {
     convertIntToBytesVector(value, this->coinValue);
 
     std::vector<unsigned char> a_pk = addr.getPublicAddressSecret();
 
-    unsigned char rho_bytes[rho_size];
-    getRandBytes(rho_bytes, rho_size);
+    unsigned char rho_bytes[ZEROCASH_RHO_SIZE];
+    getRandBytes(rho_bytes, ZEROCASH_RHO_SIZE);
     convertBytesToBytesVector(rho_bytes, this->rho);
 
-    unsigned char r_bytes[zc_r_size];
-    getRandBytes(r_bytes, zc_r_size);
+    unsigned char r_bytes[ZEROCASH_R_SIZE];
+    getRandBytes(r_bytes, ZEROCASH_R_SIZE);
     convertBytesToBytesVector(r_bytes, this->r);
 
 	this->computeCommitments(a_pk);
@@ -97,7 +97,7 @@ Coin::Coin(const PublicAddress& addr, uint64_t value): addr_pk(addr), cm(), rho(
 
 
 Coin::Coin(const PublicAddress& addr, uint64_t value,
-		   const std::vector<unsigned char>& rho, const std::vector<unsigned char>& r): addr_pk(addr), rho(rho), r(r), k(k_size), coinValue(v_size)
+		   const std::vector<unsigned char>& rho, const std::vector<unsigned char>& r): addr_pk(addr), rho(rho), r(r), k(ZEROCASH_K_SIZE), coinValue(ZEROCASH_V_SIZE)
 {
     convertIntToBytesVector(value, this->coinValue);
 
@@ -115,7 +115,7 @@ Coin::computeCommitments(std::vector<unsigned char>& a_pk)
     std::vector<unsigned char> k_internalhash_internal;
     concatenateVectors(a_pk, this->rho, k_internalhash_internal);
 
-    std::vector<unsigned char> k_internalhash(k_size);
+    std::vector<unsigned char> k_internalhash(ZEROCASH_K_SIZE);
     hashVector(k_internalhash_internal, k_internalhash);
 
     copy(k_internalhash.begin(), k_internalhash.begin()+16, k_internalhash_trunc.begin());

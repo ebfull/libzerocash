@@ -24,7 +24,7 @@ MintTransaction::MintTransaction(): coinValue(0), internalCommitment(), external
  *
  * @param c the coin to mint.
  */
-MintTransaction::MintTransaction(const Coin& c): coinValue(v_size)
+MintTransaction::MintTransaction(const Coin& c): coinValue(ZEROCASH_V_SIZE)
 {
     convertIntToBytesVector(c.getValue(), this->coinValue);
 
@@ -40,7 +40,7 @@ MintTransaction::MintTransaction(const Coin& c): coinValue(v_size)
 bool MintTransaction::verify() const{
 
 	// Check that the internal commitment is the right size
-	if (this->internalCommitment.size() != k_size) {
+	if (this->internalCommitment.size() != ZEROCASH_K_SIZE) {
 		return false;
 	}
 

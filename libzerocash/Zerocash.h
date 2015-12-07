@@ -52,14 +52,6 @@
 
 typedef std::vector<unsigned char> MerkleRootType;
 
-// Errors thrown by the Zerocash library
-
-class ZerocashException : public std::runtime_error
-{
-public:
-	explicit ZerocashException(const std::string& str) : std::runtime_error(str) {}
-};
-
 namespace libsnark {
 };
 

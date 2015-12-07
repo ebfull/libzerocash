@@ -21,7 +21,7 @@ static void throw_missing_param_file_exception(std::string paramtype, std::strin
     /* paramtype should be either "proving" or "verifying". */
     const char* tmpl = ("Could not open %s key file: %s\n"
                         "Please refer to user documentation for installing this file.");
-    throw ZerocashException((boost::format(tmpl) % paramtype % path).str());
+    throw std::runtime_error((boost::format(tmpl) % paramtype % path).str());
 }
 
 namespace libzerocash {
@@ -159,7 +159,7 @@ const zerocash_pour_proving_key<ZerocashParams::zerocash_pp>& ZerocashParams::ge
     if (params_pk_v1 != NULL) {
         return *params_pk_v1;
     } else {
-        throw ZerocashException("Pour proving key not set.");
+        throw std::runtime_error("Pour proving key not set.");
     }
 }
 
@@ -168,7 +168,7 @@ const zerocash_pour_verification_key<ZerocashParams::zerocash_pp>& ZerocashParam
     if (params_vk_v1 != NULL) {
         return *params_vk_v1;
     } else {
-        throw ZerocashException("Pour verification key not set.");
+        throw std::runtime_error("Pour verification key not set.");
     }
 }
 

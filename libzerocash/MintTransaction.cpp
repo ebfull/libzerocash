@@ -33,9 +33,6 @@ MintTransaction::MintTransaction(const Coin& c): coinValue(v_size)
 	externalCommitment = c.getCoinCommitment();
 }
 
-/// \brief
-/// \return	A true/false result
-///
 /**
  * Verify the correctness of a Mint transaction.
  *

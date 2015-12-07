@@ -77,17 +77,12 @@ private:
     void createPublicAddress(const PrivateAddress& addr_sk);
 
     const std::vector<unsigned char>& getPublicAddressSecret() const;
-
     const std::string getEncryptionPublicKey() const;
 };
 
 /******************************** Address ************************************/
 
 class Address {
-
-friend class PourTransaction;
-friend class Coin;
-
 public:
     Address();
     Address(PrivateAddress&);
@@ -109,9 +104,6 @@ public:
 private:
     PublicAddress addr_pk;
     PrivateAddress addr_sk;
-
-    const std::vector<unsigned char>& getAddressSecret() const;
-    const std::string getEncryptionSecretKey() const;
 };
 
 } /* namespace libzerocash */

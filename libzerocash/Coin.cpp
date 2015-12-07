@@ -39,7 +39,7 @@ Coin::Coin(): addr_pk(), cm(), rho(rho_size), r(zc_r_size), coinValue(v_size) {
 Coin::Coin(const std::string bucket, Address& addr): addr_pk(), cm(), rho(rho_size), r(zc_r_size), coinValue(v_size) {
     // Retreive and decode the private key
     ECIES<ECP>::PrivateKey decodedPrivateKey;
-    decodedPrivateKey.Load(StringStore(addr.getEncryptionSecretKey()).Ref());
+    decodedPrivateKey.Load(StringStore(addr.getPrivateAddress().getEncryptionSecretKey()).Ref());
 
     // Create the decryption session
     AutoSeededRandomPool prng;

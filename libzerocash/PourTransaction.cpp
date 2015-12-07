@@ -95,8 +95,8 @@ PourTransaction::PourTransaction(uint16_t version_num,
     convertBytesVectorToVector(c_1_new.getCoinCommitment().getCommitmentValue(), cm_new_1_bv);
     convertBytesVectorToVector(c_2_new.getCoinCommitment().getCommitmentValue(), cm_new_2_bv);
 
-    convertBytesVectorToVector(addr_1_old.getAddressSecret(), addr_sk_old_1_bv);
-    convertBytesVectorToVector(addr_2_old.getAddressSecret(), addr_sk_old_2_bv);
+    convertBytesVectorToVector(addr_1_old.getPrivateAddress().getAddressSecret(), addr_sk_old_1_bv);
+    convertBytesVectorToVector(addr_2_old.getPrivateAddress().getAddressSecret(), addr_sk_old_2_bv);
 
     convertBytesVectorToVector(addr_1_new.getPublicAddressSecret(), addr_pk_new_1_bv);
     convertBytesVectorToVector(addr_2_new.getPublicAddressSecret(), addr_pk_new_2_bv);

@@ -142,14 +142,6 @@ const PrivateAddress& Address::getPrivateAddress() const {
     return this->addr_sk;
 }
 
-const std::string Address::getEncryptionSecretKey() const {
-    return this->addr_sk.getEncryptionSecretKey();
-}
-
-const std::vector<unsigned char>& Address::getAddressSecret() const {
-    return this->addr_sk.getAddressSecret();
-}
-
 bool Address::operator==(const Address& rhs) const {
 	return ((this->addr_sk == rhs.addr_sk) && (this->addr_pk == rhs.addr_pk));
 }

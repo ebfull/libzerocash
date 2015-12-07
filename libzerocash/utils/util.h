@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <cstdint>
 
 #include "sha256.h"
 
@@ -41,6 +42,8 @@ void convertBytesVectorToVector(const std::vector<unsigned char>& bytes, std::ve
 void convertVectorToBytesVector(const std::vector<bool>& v, std::vector<unsigned char>& bytes);
 
 void convertIntToBytesVector(const uint64_t val_int, std::vector<unsigned char>& bytes);
+
+void convertIntToVector(uint64_t val, std::vector<bool>& v);
 
 uint64_t convertBytesVectorToInt(const std::vector<unsigned char>& bytes);
 

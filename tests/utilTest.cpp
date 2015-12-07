@@ -224,6 +224,68 @@ BOOST_AUTO_TEST_CASE( testConvertBytesVectorToInt ) {
     BOOST_CHECK( expected == val );
 }
 
+BOOST_AUTO_TEST_CASE( testConvertIntToVector ) {
+    uint64_t val;
+    std::vector<bool> expected;
+    std::vector<bool> vector;
+
+    val = 0ULL;
+    expected = { 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0 };
+    libzerocash::convertIntToVector(val, vector);
+    BOOST_CHECK( expected == vector );
+
+    val = 1ULL;
+    expected = { 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 1 };
+    libzerocash::convertIntToVector(val, vector);
+    BOOST_CHECK( expected == vector );
+
+    val = 0xffffffffffffffffULL;
+    expected = { 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1,
+                 1, 1, 1, 1, 1, 1, 1, 1 };
+    libzerocash::convertIntToVector(val, vector);
+    BOOST_CHECK( expected == vector );
+
+    val = 0x8000000080000001ULL; // sign extension
+    expected = { 1, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 1, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 0,
+                 0, 0, 0, 0, 0, 0, 0, 1 };
+    libzerocash::convertIntToVector(val, vector);
+    BOOST_CHECK( expected == vector );
+
+    std::vector<bool> too_big(100);
+    libzerocash::convertIntToVector(0, too_big);
+    BOOST_CHECK(too_big.size() == 64);
+
+    std::vector<bool> too_small(10);
+    libzerocash::convertIntToVector(0, too_small);
+    BOOST_CHECK(too_big.size() == 64);
+}
+
 BOOST_AUTO_TEST_CASE( testConcatenateTwoBoolVectors ) {
     std::vector<bool> front = { 0, 1, 0 };
     std::vector<bool> back = { 1, 0, 1 };

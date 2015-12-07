@@ -146,6 +146,14 @@ void convertIntToBytesVector(const uint64_t val_int, std::vector<unsigned char>&
     }
 }
 
+void convertIntToVector(uint64_t val, std::vector<bool>& v)
+{
+    v.resize(64);
+    for(unsigned int i = 0; i < 64; ++i, val >>= 1) {
+        v.at(63 - i) = val & 0x01;
+    }
+}
+
 uint64_t convertBytesVectorToInt(const std::vector<unsigned char>& bytes) {
     uint64_t val_int = 0;
 

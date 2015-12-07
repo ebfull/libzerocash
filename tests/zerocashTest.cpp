@@ -30,17 +30,6 @@
 using namespace std;
 using namespace libsnark;
 
-vector<bool> convertIntToVector(uint64_t val) {
-	vector<bool> ret;
-
-	for(unsigned int i = 0; i < sizeof(val) * 8; ++i, val >>= 1) {
-		ret.push_back(val & 0x01);
-	}
-
-	reverse(ret.begin(), ret.end());
-	return ret;
-}
-
 #define TEST_TREE_DEPTH 4
 
 BOOST_AUTO_TEST_CASE( AddressTest ) {
@@ -165,14 +154,18 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     libzerocash::IncrementalMerkleTree merkleTree(coinValues, TEST_TREE_DEPTH);
     cout << "Successfully created Merkle Tree.\n" << endl;
 
+    std::vector<bool> index;
+
     cout << "Creating Witness 1...\n" << endl;
     merkle_authentication_path witness_1(TEST_TREE_DEPTH);
-    merkleTree.getWitness(convertIntToVector(1), witness_1);
+    libzerocash::convertIntToVector(1, index);
+    merkleTree.getWitness(index, witness_1);
     cout << "Successfully created Witness 1.\n" << endl;
 
     cout << "Creating Witness 2...\n" << endl;
     merkle_authentication_path witness_2(TEST_TREE_DEPTH);
-    merkleTree.getWitness(convertIntToVector(3), witness_2);
+    libzerocash::convertIntToVector(3, index);
+    merkleTree.getWitness(index, witness_2);
     cout << "Successfully created Witness 2.\n" << endl;
 
     cout << "Creating coins to spend...\n" << endl;
@@ -351,7 +344,9 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
     merkle_authentication_path witness_1(TEST_TREE_DEPTH);
 
     libzerocash::timer_start("Witness");
-    if (merkleTree.getWitness(convertIntToVector(1), witness_1) == false) {
+    std::vector<bool> index;
+    libzerocash::convertIntToVector(1, index);
+    if (merkleTree.getWitness(index, witness_1) == false) {
         BOOST_ERROR("Could not get witness");
 	}
     libzerocash::timer_stop("Witness");
@@ -363,7 +358,8 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
     cout << "\n" << endl;
 
     merkle_authentication_path witness_2(TEST_TREE_DEPTH);
-    if (merkleTree.getWitness(convertIntToVector(3), witness_2) == false) {
+    libzerocash::convertIntToVector(3, index);
+    if (merkleTree.getWitness(index, witness_2) == false) {
 		cout << "Could not get witness" << endl;
 	}
 
@@ -474,7 +470,6 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
 	reconstitutedTree.insertVector(coinValues);
 	merkleTree.insertVector(coinValues);
 
-	vector<bool> index;
 	reconstitutedTree.getRootValue(root);
 	cout << "New root (added a bunch more): ";
 	libzerocash::printVectorAsHex(root);
@@ -486,7 +481,9 @@ BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
 	cout << endl;
 
     merkle_authentication_path witness(16);
-	if (merkleTree.getWitness(convertIntToVector(3), witness) == false) {
+    std::vector<bool> index;
+    libzerocash::convertIntToVector(3, index);
+	if (merkleTree.getWitness(index, witness) == false) {
 		BOOST_ERROR("Witness generation failed.");
 	}
 
@@ -570,16 +567,20 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     libzerocash::IncrementalMerkleTree merkleTree(coinValues, TEST_TREE_DEPTH);
     cout << "Successfully created Merkle Tree.\n" << endl;
 
+    std::vector<bool> index;
+
     cout << "Creating Witness 1...\n" << endl;
     merkle_authentication_path witness_1(TEST_TREE_DEPTH);
-    if (merkleTree.getWitness(convertIntToVector(1), witness_1) == false) {
+    libzerocash::convertIntToVector(1, index);
+    if (merkleTree.getWitness(index, witness_1) == false) {
 		BOOST_ERROR("Could not get witness");
 	}
     cout << "Successfully created Witness 1.\n" << endl;
 
     cout << "Creating Witness 2...\n" << endl;
     merkle_authentication_path witness_2(TEST_TREE_DEPTH);
-    if (merkleTree.getWitness(convertIntToVector(3), witness_2) == false) {
+    libzerocash::convertIntToVector(3, index);
+    if (merkleTree.getWitness(index, witness_2) == false) {
 		cout << "Could not get witness" << endl;
 	}
     cout << "Successfully created Witness 2.\n" << endl;

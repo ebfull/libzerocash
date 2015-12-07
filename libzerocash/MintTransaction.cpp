@@ -23,7 +23,6 @@ MintTransaction::MintTransaction(): coinValue(0), internalCommitment(), external
  * Creates a transaction minting the coin c.
  *
  * @param c the coin to mint.
- * throws runtime_error if there's a fundamental error (e.g out of memory) FIXME acutally do this
  */
 MintTransaction::MintTransaction(const Coin& c): coinValue(v_size)
 {

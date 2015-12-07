@@ -138,6 +138,7 @@ clean:
 		$(OBJS) \
 		$(EXECUTABLES) \
 		${patsubst %,%.o,${EXECUTABLES}} \
+		${patsubst %,%.d,${EXECUTABLES}} \
 		${patsubst %.cpp,%.d,${SRCS}} \
 		libzerocash.a \
 		tests/test_library

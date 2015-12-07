@@ -11,25 +11,22 @@
 
 /*************************** HEADER FILES ***************************/
 #include <stddef.h>
+#include <stdint.h>
 
 /****************************** MACROS ******************************/
 #define SHA256_BLOCK_SIZE 32            // SHA256 outputs a 32 byte digest
 
-/**************************** DATA TYPES ****************************/
-typedef unsigned char BYTE;             // 8-bit byte
-typedef unsigned int  WORD;             // 32-bit word, change to "long" for 16-bit machines
-
 typedef struct {
-	BYTE data[64];
-	WORD datalen;
+	uint8_t data[64];
+	uint32_t datalen;
 	unsigned long long bitlen;
-	WORD state[8];
+	uint32_t state[8];
 } SHA256_CTX_mod;
 
 /*********************** FUNCTION DECLARATIONS **********************/
 void sha256_init(SHA256_CTX_mod *ctx);
-void sha256_update(SHA256_CTX_mod *ctx, const BYTE data[], size_t len);
+void sha256_update(SHA256_CTX_mod *ctx, const uint8_t data[], size_t len);
 void sha256_length_padding(SHA256_CTX_mod *ctx);
-void sha256_final_no_padding(SHA256_CTX_mod *ctx, BYTE hash[]);
+void sha256_final_no_padding(SHA256_CTX_mod *ctx, uint8_t hash[]);
 
 #endif   // SHA256H_H

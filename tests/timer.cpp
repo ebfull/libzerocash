@@ -18,7 +18,6 @@ namespace libzerocash {
 
 struct timeval tv_start;
 struct timeval tv_end;
-float elapsed;
 
 void timer_start() {
     printf("%s\n", "Starting Timer");
@@ -26,6 +25,7 @@ void timer_start() {
 }
 
 void timer_stop() {
+    float elapsed;
     gettimeofday(&tv_end, 0);
 
     elapsed = float(tv_end.tv_sec-tv_start.tv_sec) + (tv_end.tv_usec-tv_start.tv_usec)/float(1000000);
@@ -38,6 +38,7 @@ void timer_start(const std::string location) {
 }
 
 void timer_stop(const std::string location) {
+    float elapsed;
     gettimeofday(&tv_end, 0);
 
     elapsed = float(tv_end.tv_sec-tv_start.tv_sec) + (tv_end.tv_usec-tv_start.tv_usec)/float(1000000);

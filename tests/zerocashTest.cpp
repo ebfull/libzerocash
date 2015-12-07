@@ -117,14 +117,13 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
         BOOST_ERROR("Proving and verification key are not equal.");
     }
 
-    vector<libzerocash::Coin> coins(5);
+    vector<libzerocash::Coin> coins;
     vector<libzerocash::Address> addrs;
-    addrs.reserve(5);
 
     cout << "Creating Addresses and Coins...\n" << endl;
-    for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
-        coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
+    for(size_t i = 0; i < 5; i++) {
+        addrs.push_back(libzerocash::Address::CreateNewRandomAddress());
+        coins.push_back(libzerocash::Coin(addrs.at(i).getPublicAddress(), i));
     }
     cout << "Successfully created address and coins.\n" << endl;
 
@@ -315,13 +314,12 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
 
     cout << "Successfully created Params.\n" << endl;
 
-    vector<libzerocash::Coin> coins(5);
+    vector<libzerocash::Coin> coins;
     vector<libzerocash::Address> addrs;
-    addrs.reserve(5);
 
-    for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
-        coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
+    for(size_t i = 0; i < 5; i++) {
+        addrs.push_back(libzerocash::Address::CreateNewRandomAddress());
+        coins.push_back(libzerocash::Coin(addrs.at(i).getPublicAddress(), i));
     }
 
     cout << "Successfully created coins.\n" << endl;
@@ -420,15 +418,14 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
 BOOST_AUTO_TEST_CASE( MerkleTreeSimpleTest ) {
     cout << "\nMERKLE TREE SIMPLE TEST\n" << endl;
 
-    vector<libzerocash::Coin> coins(5);
+    vector<libzerocash::Coin> coins;
     vector<libzerocash::Address> addrs;
-    addrs.reserve(5);
 
     cout << "Creating coins...\n" << endl;
 
-    for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
-        coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
+    for(size_t i = 0; i < 5; i++) {
+        addrs.push_back(libzerocash::Address::CreateNewRandomAddress());
+        coins.push_back(libzerocash::Coin(addrs.at(i).getPublicAddress(), i));
     }
 
     cout << "Successfully created coins.\n" << endl;
@@ -533,14 +530,13 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     );
     libzerocash::timer_stop("Param Generation");
 
-    vector<libzerocash::Coin> coins(5);
+    vector<libzerocash::Coin> coins;
     vector<libzerocash::Address> addrs;
-    addrs.reserve(5);
 
     cout << "Creating Addresses and Coins...\n" << endl;
-    for(size_t i = 0; i < coins.size(); i++) {
-        addrs.at(i) = libzerocash::Address::CreateNewRandomAddress();
-        coins.at(i) = libzerocash::Coin(addrs.at(i).getPublicAddress(), i);
+    for(size_t i = 0; i < 5; i++) {
+        addrs.push_back(libzerocash::Address::CreateNewRandomAddress());
+        coins.push_back(libzerocash::Coin(addrs.at(i).getPublicAddress(), i));
     }
     cout << "Successfully created address and coins.\n" << endl;
 

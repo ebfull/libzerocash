@@ -22,11 +22,6 @@ namespace libzerocash {
 /***************************** Private address ********************************/
 
 class PrivateAddress {
-
-    friend class Address;
-    friend class Coin;
-    friend class PourTransaction;
-
 public:
     PrivateAddress();
 

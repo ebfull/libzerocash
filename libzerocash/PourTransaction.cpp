@@ -50,10 +50,10 @@ PourTransaction::PourTransaction(ZerocashParams& params,
                                  const MerkleRootType& rt,
                                  std::vector<PourInput> inputs,
                                  std::vector<PourOutput> outputs,
-                                 uint64_t vpub_in,
-                                 uint64_t vpub_out
+                                 uint64_t vpub_old,
+                                 uint64_t vpub_new
                                 ) :
-    publicInValue(ZC_V_SIZE), publicOutValue(ZC_V_SIZE), serialNumber_1(ZC_SN_SIZE), serialNumber_2(ZC_SN_SIZE), MAC_1(ZC_H_SIZE), MAC_2(ZC_H_SIZE)
+    publicOldValue(ZC_V_SIZE), publicNewValue(ZC_V_SIZE), serialNumber_1(ZC_SN_SIZE), serialNumber_2(ZC_SN_SIZE), MAC_1(ZC_H_SIZE), MAC_2(ZC_H_SIZE)
 {
     if (inputs.size() > 2 || outputs.size() > 2) {
         throw std::length_error("Too many inputs or outputs specified");
@@ -82,8 +82,8 @@ PourTransaction::PourTransaction(ZerocashParams& params,
          inputs[1].path,
          outputs[0].to_address,
          outputs[1].to_address,
-         vpub_in,
-         vpub_out,
+         vpub_old,
+         vpub_new,
          pubkeyHash,
          outputs[0].new_coin,
          outputs[1].new_coin);
@@ -102,15 +102,15 @@ PourTransaction::PourTransaction(uint16_t version_num,
                                  const merkle_authentication_path& patMAC_2,
                                  const PublicAddress& addr_1_new,
                                  const PublicAddress& addr_2_new,
-                                 uint64_t v_pub_in,
-                                 uint64_t v_pub_out,
+                                 uint64_t v_pub_old,
+                                 uint64_t v_pub_new,
                                  const std::vector<unsigned char>& pubkeyHash,
                                  const Coin& c_1_new,
                                  const Coin& c_2_new) :
-    publicInValue(ZC_V_SIZE), publicOutValue(ZC_V_SIZE), serialNumber_1(ZC_SN_SIZE), serialNumber_2(ZC_SN_SIZE), MAC_1(ZC_H_SIZE), MAC_2(ZC_H_SIZE)
+    publicOldValue(ZC_V_SIZE), publicNewValue(ZC_V_SIZE), serialNumber_1(ZC_SN_SIZE), serialNumber_2(ZC_SN_SIZE), MAC_1(ZC_H_SIZE), MAC_2(ZC_H_SIZE)
 {
     init(version_num, params, rt, c_1_old, c_2_old, addr_1_old, addr_2_old, patMerkleIdx_1, patMerkleIdx_2,
-         patMAC_1, patMAC_2, addr_1_new, addr_2_new, v_pub_in, v_pub_out, pubkeyHash, c_1_new, c_2_new);
+         patMAC_1, patMAC_2, addr_1_new, addr_2_new, v_pub_old, v_pub_new, pubkeyHash, c_1_new, c_2_new);
 }
 
 void PourTransaction::init(uint16_t version_num,
@@ -126,16 +126,16 @@ void PourTransaction::init(uint16_t version_num,
                      const merkle_authentication_path& patMAC_2,
                      const PublicAddress& addr_1_new,
                      const PublicAddress& addr_2_new,
-                     uint64_t v_pub_in,
-                     uint64_t v_pub_out,
+                     uint64_t v_pub_old,
+                     uint64_t v_pub_new,
                      const std::vector<unsigned char>& pubkeyHash,
                      const Coin& c_1_new,
                      const Coin& c_2_new)
 {
     this->version = version_num;
 
-    convertIntToBytesVector(v_pub_in, this->publicInValue);
-    convertIntToBytesVector(v_pub_out, this->publicOutValue);
+    convertIntToBytesVector(v_pub_old, this->publicOldValue);
+    convertIntToBytesVector(v_pub_new, this->publicNewValue);
 
     this->cm_1 = c_1_new.getCoinCommitment();
     this->cm_2 = c_2_new.getCoinCommitment();
@@ -155,8 +155,8 @@ void PourTransaction::init(uint16_t version_num,
     std::vector<bool> nonce_old_2_bv(ZC_RHO_SIZE * 8);
     std::vector<bool> val_new_1_bv(ZC_V_SIZE * 8);
     std::vector<bool> val_new_2_bv(ZC_V_SIZE * 8);
-    std::vector<bool> val_in_pub_bv(ZC_V_SIZE * 8);
-    std::vector<bool> val_out_pub_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_old_pub_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_new_pub_bv(ZC_V_SIZE * 8);
     std::vector<bool> val_old_1_bv(ZC_V_SIZE * 8);
     std::vector<bool> val_old_2_bv(ZC_V_SIZE * 8);
     std::vector<bool> cm_new_1_bv(ZC_CM_SIZE * 8);
@@ -201,8 +201,8 @@ void PourTransaction::init(uint16_t version_num,
     convertIntToBytesVector(c_2_new.getValue(), v_new_2_conv);
     libzerocash::convertBytesVectorToVector(v_new_2_conv, val_new_2_bv);
 
-    convertBytesVectorToVector(this->publicInValue, val_in_pub_bv);
-    convertBytesVectorToVector(this->publicOutValue, val_out_pub_bv);
+    convertBytesVectorToVector(this->publicOldValue, val_old_pub_bv);
+    convertBytesVectorToVector(this->publicNewValue, val_new_pub_bv);
 
     std::vector<bool> nonce_old_1(ZC_RHO_SIZE * 8);
     copy(nonce_old_1_bv.begin(), nonce_old_1_bv.end(), nonce_old_1.begin());
@@ -280,8 +280,8 @@ void PourTransaction::init(uint16_t version_num,
             { nonce_new_1_bv, nonce_new_2_bv },
             { nonce_old_1_bv, nonce_old_2_bv },
             { val_new_1_bv, val_new_2_bv },
-            val_in_pub_bv,
-            val_out_pub_bv,
+            val_old_pub_bv,
+            val_new_pub_bv,
             { val_old_1_bv, val_old_2_bv },
             h_S_bv);
 
@@ -370,8 +370,8 @@ bool PourTransaction::verify(ZerocashParams& params,
 	if (pubkeyHash.size() != ZC_H_SIZE)	{ return false; }
 	if (this->serialNumber_1.size() != ZC_SN_SIZE)	{ return false; }
 	if (this->serialNumber_2.size() != ZC_SN_SIZE)	{ return false; }
-	if (this->publicInValue.size() != ZC_V_SIZE) { return false; }
-	if (this->publicOutValue.size() != ZC_V_SIZE) { return false; }
+	if (this->publicOldValue.size() != ZC_V_SIZE) { return false; }
+	if (this->publicNewValue.size() != ZC_V_SIZE) { return false; }
 	if (this->MAC_1.size() != ZC_H_SIZE)	{ return false; }
 	if (this->MAC_2.size() != ZC_H_SIZE)	{ return false; }
 
@@ -380,8 +380,8 @@ bool PourTransaction::verify(ZerocashParams& params,
     std::vector<bool> sn_old_2_bv(ZC_SN_SIZE * 8);
     std::vector<bool> cm_new_1_bv(ZC_CM_SIZE * 8);
     std::vector<bool> cm_new_2_bv(ZC_CM_SIZE * 8);
-    std::vector<bool> val_in_pub_bv(ZC_V_SIZE * 8);
-    std::vector<bool> val_out_pub_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_old_pub_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_new_pub_bv(ZC_V_SIZE * 8);
     std::vector<bool> MAC_1_bv(ZC_H_SIZE * 8);
     std::vector<bool> MAC_2_bv(ZC_H_SIZE * 8);
 
@@ -390,8 +390,8 @@ bool PourTransaction::verify(ZerocashParams& params,
     convertBytesVectorToVector(this->serialNumber_2, sn_old_2_bv);
     convertBytesVectorToVector(this->cm_1.getCommitmentValue(), cm_new_1_bv);
     convertBytesVectorToVector(this->cm_2.getCommitmentValue(), cm_new_2_bv);
-    convertBytesVectorToVector(this->publicInValue, val_in_pub_bv);
-    convertBytesVectorToVector(this->publicOutValue, val_out_pub_bv);
+    convertBytesVectorToVector(this->publicOldValue, val_old_pub_bv);
+    convertBytesVectorToVector(this->publicNewValue, val_new_pub_bv);
     convertBytesVectorToVector(this->MAC_1, MAC_1_bv);
     convertBytesVectorToVector(this->MAC_2, MAC_2_bv);
 
@@ -416,8 +416,8 @@ bool PourTransaction::verify(ZerocashParams& params,
                                                                                       root_bv,
                                                                                       { sn_old_1_bv, sn_old_2_bv },
                                                                                       { cm_new_1_bv, cm_new_2_bv },
-                                                                                      val_in_pub_bv,
-                                                                                      val_out_pub_bv,
+                                                                                      val_old_pub_bv,
+                                                                                      val_new_pub_bv,
                                                                                       h_S_bv,
                                                                                       { MAC_1_bv, MAC_2_bv },
                                                                                       proof_SNARK);
@@ -456,11 +456,11 @@ const CoinCommitmentValue& PourTransaction::getNewCoinCommitmentValue2() const{
 }
 
 uint64_t PourTransaction::getPublicValueIn() const{
-    return convertBytesVectorToInt(this->publicInValue);
+    return convertBytesVectorToInt(this->publicOldValue);
 }
 
 uint64_t PourTransaction::getPublicValueOut() const{
-	return convertBytesVectorToInt(this->publicOutValue);
+	return convertBytesVectorToInt(this->publicNewValue);
 }
 
 } /* namespace libzerocash */

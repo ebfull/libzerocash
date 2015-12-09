@@ -34,8 +34,8 @@ public:
                                  const MerkleRootType& rt,
                                  const std::vector<PourInput> inputs,
                                  const std::vector<PourOutput> outputs,
-                                 uint64_t vpub_in,
-                                 uint64_t vpub_out
+                                 uint64_t vpub_old,
+                                 uint64_t vpub_new
                                 );
     /**
      * Generates a transaction pouring the funds  in  two existing coins into two new coins and optionally
@@ -136,8 +136,8 @@ public:
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
         READWRITE(version);
-        READWRITE(publicInValue);
-        READWRITE(publicOutValue);
+        READWRITE(publicOldValue);
+        READWRITE(publicNewValue);
         READWRITE(serialNumber_1);
         READWRITE(serialNumber_2);
         READWRITE(cm_1);
@@ -152,8 +152,8 @@ public:
 
 private:
 
-    std::vector<unsigned char>  publicInValue;      // public input value of the Pour transaction
-    std::vector<unsigned char>  publicOutValue;     // public output value of the Pour transaction
+    std::vector<unsigned char>  publicOldValue;      // public input value of the Pour transaction
+    std::vector<unsigned char>  publicNewValue;     // public output value of the Pour transaction
     std::vector<unsigned char>  serialNumber_1;     // serial number of input (old) coin #1
     std::vector<unsigned char>  serialNumber_2;     // serial number of input (old) coin #1
     CoinCommitment              cm_1;               // coin commitment for output coin #1

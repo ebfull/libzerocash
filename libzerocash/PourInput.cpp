@@ -16,7 +16,9 @@
 
 namespace libzerocash {
 
-PourInput::PourInput(int tree_depth): old_coin(), old_address(), merkle_index(), path() {
+PourInput::PourInput(int tree_depth): old_coin(), merkle_index(), path() {
+	this->old_address = Address::CreateNewRandomAddress();
+
 	this->old_coin = Coin(this->old_address.getPublicAddress(), 0);
 
 	// dummy merkle tree
@@ -38,7 +40,8 @@ PourInput::PourInput(int tree_depth): old_coin(), old_address(), merkle_index(),
 PourInput::PourInput(Coin old_coin,
           Address old_address,
           size_t merkle_index,
-          merkle_authentication_path path) : old_coin(old_coin), old_address(old_address), merkle_index(merkle_index), path(path) {
+          merkle_authentication_path path) : old_coin(old_coin), merkle_index(merkle_index), path(path) {
+		this->old_address = old_address;
 };
 
 } /* namespace libzerocash */

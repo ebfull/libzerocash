@@ -261,7 +261,7 @@ bool test_pour(libzerocash::ZerocashParams& p,
     vector<pour_input_state> input_state;
 
     for(std::vector<uint64_t>::iterator it = inputs.begin(); it != inputs.end(); ++it) {
-        libzerocash::Address addr;
+        libzerocash::Address addr = libzerocash::Address::CreateNewRandomAddress();
         libzerocash::Coin coin(addr.getPublicAddress(), *it);
 
         // commitment from coin

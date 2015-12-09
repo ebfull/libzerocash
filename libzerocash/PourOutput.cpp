@@ -16,7 +16,7 @@
 namespace libzerocash {
 
 PourOutput::PourOutput(uint64_t val) {
-	Address dummy_to_address;
+	Address dummy_to_address = Address::CreateNewRandomAddress();
 
 	this->to_address = dummy_to_address.getPublicAddress();
 	this->new_coin = Coin(dummy_to_address.getPublicAddress(), val);

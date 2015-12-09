@@ -55,12 +55,12 @@ const std::vector<unsigned char>& PrivateAddress::getAddressSecret() const {
     return this->a_sk;
 }
 
-PublicAddress::PublicAddress(): a_pk(ZEROCASH_A_PK_SIZE) {
+PublicAddress::PublicAddress(): a_pk(ZC_A_PK_SIZE) {
     this->pk_enc = "";
 }
 
-PublicAddress::PublicAddress(const PrivateAddress& addr_sk): a_pk(ZEROCASH_A_PK_SIZE) {
-    std::vector<bool> a_sk_bool(ZEROCASH_A_SK_SIZE * 8);
+PublicAddress::PublicAddress(const PrivateAddress& addr_sk): a_pk(ZC_A_PK_SIZE) {
+    std::vector<bool> a_sk_bool(ZC_A_SK_SIZE * 8);
     convertBytesVectorToVector(addr_sk.getAddressSecret(), a_sk_bool);
 
     std::vector<bool> zeros_256(256, 0);
@@ -68,7 +68,7 @@ PublicAddress::PublicAddress(const PrivateAddress& addr_sk): a_pk(ZEROCASH_A_PK_
     std::vector<bool> a_pk_internal;
     concatenateVectors(a_sk_bool, zeros_256, a_pk_internal);
 
-    std::vector<bool> a_pk_bool(ZEROCASH_A_PK_SIZE * 8);
+    std::vector<bool> a_pk_bool(ZC_A_PK_SIZE * 8);
     hashVector(a_pk_internal, a_pk_bool);
 
     convertVectorToBytesVector(a_pk_bool, this->a_pk);
@@ -127,10 +127,10 @@ bool Address::operator!=(const Address& rhs) const {
 }
 
 Address Address::CreateNewRandomAddress() {
-    std::vector<unsigned char> a_sk(ZEROCASH_A_SK_SIZE);
+    std::vector<unsigned char> a_sk(ZC_A_SK_SIZE);
 
-    unsigned char a_sk_bytes[ZEROCASH_A_SK_SIZE];
-    getRandBytes(a_sk_bytes, ZEROCASH_A_SK_SIZE);
+    unsigned char a_sk_bytes[ZC_A_SK_SIZE];
+    getRandBytes(a_sk_bytes, ZC_A_SK_SIZE);
     convertBytesToBytesVector(a_sk_bytes, a_sk);
 
     AutoSeededRandomPool prng;

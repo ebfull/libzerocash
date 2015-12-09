@@ -60,7 +60,7 @@ PourTransaction::PourTransaction(uint16_t version_num,
                                  const std::vector<unsigned char>& pubkeyHash,
                                  const Coin& c_1_new,
                                  const Coin& c_2_new) :
-    publicValue(ZEROCASH_V_SIZE), serialNumber_1(ZEROCASH_SN_SIZE), serialNumber_2(ZEROCASH_SN_SIZE), MAC_1(ZEROCASH_H_SIZE), MAC_2(ZEROCASH_H_SIZE)
+    publicValue(ZC_V_SIZE), serialNumber_1(ZC_SN_SIZE), serialNumber_2(ZC_SN_SIZE), MAC_1(ZC_H_SIZE), MAC_2(ZC_H_SIZE)
 {
     this->version = version_num;
 
@@ -69,26 +69,26 @@ PourTransaction::PourTransaction(uint16_t version_num,
     this->cm_1 = c_1_new.getCoinCommitment();
     this->cm_2 = c_2_new.getCoinCommitment();
 
-	std::vector<bool> root_bv(ZEROCASH_ROOT_SIZE * 8);
-    std::vector<bool> addr_pk_new_1_bv(ZEROCASH_A_PK_SIZE * 8);
-    std::vector<bool> addr_pk_new_2_bv(ZEROCASH_A_PK_SIZE * 8);
-    std::vector<bool> addr_sk_old_1_bv(ZEROCASH_A_SK_SIZE * 8);
-    std::vector<bool> addr_sk_old_2_bv(ZEROCASH_A_SK_SIZE * 8);
-    std::vector<bool> rand_new_1_bv(ZEROCASH_R_SIZE * 8);
-    std::vector<bool> rand_new_2_bv(ZEROCASH_R_SIZE * 8);
-    std::vector<bool> rand_old_1_bv(ZEROCASH_R_SIZE * 8);
-    std::vector<bool> rand_old_2_bv(ZEROCASH_R_SIZE * 8);
-    std::vector<bool> nonce_new_1_bv(ZEROCASH_RHO_SIZE * 8);
-    std::vector<bool> nonce_new_2_bv(ZEROCASH_RHO_SIZE * 8);
-    std::vector<bool> nonce_old_1_bv(ZEROCASH_RHO_SIZE * 8);
-    std::vector<bool> nonce_old_2_bv(ZEROCASH_RHO_SIZE * 8);
-    std::vector<bool> val_new_1_bv(ZEROCASH_V_SIZE * 8);
-    std::vector<bool> val_new_2_bv(ZEROCASH_V_SIZE * 8);
-    std::vector<bool> val_pub_bv(ZEROCASH_V_SIZE * 8);
-    std::vector<bool> val_old_1_bv(ZEROCASH_V_SIZE * 8);
-    std::vector<bool> val_old_2_bv(ZEROCASH_V_SIZE * 8);
-    std::vector<bool> cm_new_1_bv(ZEROCASH_CM_SIZE * 8);
-    std::vector<bool> cm_new_2_bv(ZEROCASH_CM_SIZE * 8);
+	std::vector<bool> root_bv(ZC_ROOT_SIZE * 8);
+    std::vector<bool> addr_pk_new_1_bv(ZC_A_PK_SIZE * 8);
+    std::vector<bool> addr_pk_new_2_bv(ZC_A_PK_SIZE * 8);
+    std::vector<bool> addr_sk_old_1_bv(ZC_A_SK_SIZE * 8);
+    std::vector<bool> addr_sk_old_2_bv(ZC_A_SK_SIZE * 8);
+    std::vector<bool> rand_new_1_bv(ZC_R_SIZE * 8);
+    std::vector<bool> rand_new_2_bv(ZC_R_SIZE * 8);
+    std::vector<bool> rand_old_1_bv(ZC_R_SIZE * 8);
+    std::vector<bool> rand_old_2_bv(ZC_R_SIZE * 8);
+    std::vector<bool> nonce_new_1_bv(ZC_RHO_SIZE * 8);
+    std::vector<bool> nonce_new_2_bv(ZC_RHO_SIZE * 8);
+    std::vector<bool> nonce_old_1_bv(ZC_RHO_SIZE * 8);
+    std::vector<bool> nonce_old_2_bv(ZC_RHO_SIZE * 8);
+    std::vector<bool> val_new_1_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_new_2_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_pub_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_old_1_bv(ZC_V_SIZE * 8);
+    std::vector<bool> val_old_2_bv(ZC_V_SIZE * 8);
+    std::vector<bool> cm_new_1_bv(ZC_CM_SIZE * 8);
+    std::vector<bool> cm_new_2_bv(ZC_CM_SIZE * 8);
 
 	convertBytesVectorToVector(rt, root_bv);
 
@@ -113,25 +113,25 @@ PourTransaction::PourTransaction(uint16_t version_num,
     convertBytesVectorToVector(c_1_new.getRho(), nonce_new_1_bv);
     convertBytesVectorToVector(c_2_new.getRho(), nonce_new_2_bv);
 
-    std::vector<unsigned char> v_old_1_conv(ZEROCASH_V_SIZE, 0);
+    std::vector<unsigned char> v_old_1_conv(ZC_V_SIZE, 0);
     convertIntToBytesVector(c_1_old.getValue(), v_old_1_conv);
     libzerocash::convertBytesVectorToVector(v_old_1_conv, val_old_1_bv);
 
-    std::vector<unsigned char> v_old_2_conv(ZEROCASH_V_SIZE, 0);
+    std::vector<unsigned char> v_old_2_conv(ZC_V_SIZE, 0);
     convertIntToBytesVector(c_2_old.getValue(), v_old_2_conv);
     libzerocash::convertBytesVectorToVector(v_old_2_conv, val_old_2_bv);
 
-    std::vector<unsigned char> v_new_1_conv(ZEROCASH_V_SIZE, 0);
+    std::vector<unsigned char> v_new_1_conv(ZC_V_SIZE, 0);
     convertIntToBytesVector(c_1_new.getValue(), v_new_1_conv);
     libzerocash::convertBytesVectorToVector(v_new_1_conv, val_new_1_bv);
 
-    std::vector<unsigned char> v_new_2_conv(ZEROCASH_V_SIZE, 0);
+    std::vector<unsigned char> v_new_2_conv(ZC_V_SIZE, 0);
     convertIntToBytesVector(c_2_new.getValue(), v_new_2_conv);
     libzerocash::convertBytesVectorToVector(v_new_2_conv, val_new_2_bv);
 
     convertBytesVectorToVector(this->publicValue, val_pub_bv);
 
-    std::vector<bool> nonce_old_1(ZEROCASH_RHO_SIZE * 8);
+    std::vector<bool> nonce_old_1(ZC_RHO_SIZE * 8);
     copy(nonce_old_1_bv.begin(), nonce_old_1_bv.end(), nonce_old_1.begin());
     nonce_old_1.erase(nonce_old_1.end()-2, nonce_old_1.end());
 
@@ -140,12 +140,12 @@ PourTransaction::PourTransaction(uint16_t version_num,
 
     std::vector<bool> sn_internal_1;
     concatenateVectors(addr_sk_old_1_bv, nonce_old_1, sn_internal_1);
-    std::vector<bool> sn_old_1_bv(ZEROCASH_SN_SIZE * 8);
+    std::vector<bool> sn_old_1_bv(ZC_SN_SIZE * 8);
     hashVector(sn_internal_1, sn_old_1_bv);
 
     convertVectorToBytesVector(sn_old_1_bv, this->serialNumber_1);
 
-    std::vector<bool> nonce_old_2(ZEROCASH_RHO_SIZE * 8);
+    std::vector<bool> nonce_old_2(ZC_RHO_SIZE * 8);
     copy(nonce_old_2_bv.begin(), nonce_old_2_bv.end(), nonce_old_2.begin());
     nonce_old_2.erase(nonce_old_2.end()-2, nonce_old_2.end());
 
@@ -154,23 +154,23 @@ PourTransaction::PourTransaction(uint16_t version_num,
 
     std::vector<bool> sn_internal_2;
     concatenateVectors(addr_sk_old_2_bv, nonce_old_2, sn_internal_2);
-    std::vector<bool> sn_old_2_bv(ZEROCASH_SN_SIZE * 8);
+    std::vector<bool> sn_old_2_bv(ZC_SN_SIZE * 8);
     hashVector(sn_internal_2, sn_old_2_bv);
 
     convertVectorToBytesVector(sn_old_2_bv, this->serialNumber_2);
 
-    unsigned char h_S_bytes[ZEROCASH_H_SIZE];
-    unsigned char pubkeyHash_bytes[ZEROCASH_H_SIZE];
+    unsigned char h_S_bytes[ZC_H_SIZE];
+    unsigned char pubkeyHash_bytes[ZC_H_SIZE];
     convertBytesVectorToBytes(pubkeyHash, pubkeyHash_bytes);
     SHA256_CTX sha256;
     SHA256_Init(&sha256);
-    SHA256_Update(&sha256, pubkeyHash_bytes, ZEROCASH_H_SIZE);
+    SHA256_Update(&sha256, pubkeyHash_bytes, ZC_H_SIZE);
     SHA256_Final(h_S_bytes, &sha256);
 
-    std::vector<bool> h_S_bv(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> h_S_bv(ZC_H_SIZE * 8);
     convertBytesToVector(h_S_bytes, h_S_bv);
 
-    std::vector<bool> h_S_internal1(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> h_S_internal1(ZC_H_SIZE * 8);
     convertBytesToVector(h_S_bytes, h_S_internal1);
     h_S_internal1.erase(h_S_internal1.end()-3, h_S_internal1.end());
     std::vector<bool> h_S_internal2 = h_S_internal1;
@@ -185,13 +185,13 @@ PourTransaction::PourTransaction(uint16_t version_num,
 
     std::vector<bool> MAC_1_internal;
     concatenateVectors(addr_sk_old_1_bv, h_S_internal1, MAC_1_internal);
-    std::vector<bool> MAC_1_bv(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> MAC_1_bv(ZC_H_SIZE * 8);
     hashVector(MAC_1_internal, MAC_1_bv);
     convertVectorToBytesVector(MAC_1_bv, this->MAC_1);
 
     std::vector<bool> MAC_2_internal;
     concatenateVectors(addr_sk_old_2_bv, h_S_internal2, MAC_2_internal);
-    std::vector<bool> MAC_2_bv(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> MAC_2_bv(ZC_H_SIZE * 8);
     hashVector(MAC_2_internal, MAC_2_bv);
     convertVectorToBytesVector(MAC_2_bv, this->MAC_2);
 
@@ -218,12 +218,12 @@ PourTransaction::PourTransaction(uint16_t version_num,
  	   this->zkSNARK = std::string(1235,'A');
     }
 
-    unsigned char val_new_1_bytes[ZEROCASH_V_SIZE];
-    unsigned char val_new_2_bytes[ZEROCASH_V_SIZE];
-    unsigned char nonce_new_1_bytes[ZEROCASH_RHO_SIZE];
-    unsigned char nonce_new_2_bytes[ZEROCASH_RHO_SIZE];
-    unsigned char rand_new_1_bytes[ZEROCASH_R_SIZE];
-    unsigned char rand_new_2_bytes[ZEROCASH_R_SIZE];
+    unsigned char val_new_1_bytes[ZC_V_SIZE];
+    unsigned char val_new_2_bytes[ZC_V_SIZE];
+    unsigned char nonce_new_1_bytes[ZC_RHO_SIZE];
+    unsigned char nonce_new_2_bytes[ZC_RHO_SIZE];
+    unsigned char rand_new_1_bytes[ZC_R_SIZE];
+    unsigned char rand_new_2_bytes[ZC_R_SIZE];
 
     convertVectorToBytes(val_new_1_bv, val_new_1_bytes);
     convertVectorToBytes(val_new_2_bv, val_new_2_bytes);
@@ -232,12 +232,12 @@ PourTransaction::PourTransaction(uint16_t version_num,
     convertVectorToBytes(nonce_new_1_bv, nonce_new_1_bytes);
     convertVectorToBytes(nonce_new_2_bv, nonce_new_2_bytes);
 
-    std::string val_new_1_string(val_new_1_bytes, val_new_1_bytes + ZEROCASH_V_SIZE);
-    std::string val_new_2_string(val_new_2_bytes, val_new_2_bytes + ZEROCASH_V_SIZE);
-    std::string nonce_new_1_string(nonce_new_1_bytes, nonce_new_1_bytes + ZEROCASH_RHO_SIZE);
-    std::string nonce_new_2_string(nonce_new_2_bytes, nonce_new_2_bytes + ZEROCASH_RHO_SIZE);
-    std::string rand_new_1_string(rand_new_1_bytes, rand_new_1_bytes + ZEROCASH_R_SIZE);
-    std::string rand_new_2_string(rand_new_2_bytes, rand_new_2_bytes + ZEROCASH_R_SIZE);
+    std::string val_new_1_string(val_new_1_bytes, val_new_1_bytes + ZC_V_SIZE);
+    std::string val_new_2_string(val_new_2_bytes, val_new_2_bytes + ZC_V_SIZE);
+    std::string nonce_new_1_string(nonce_new_1_bytes, nonce_new_1_bytes + ZC_RHO_SIZE);
+    std::string nonce_new_2_string(nonce_new_2_bytes, nonce_new_2_bytes + ZC_RHO_SIZE);
+    std::string rand_new_1_string(rand_new_1_bytes, rand_new_1_bytes + ZC_R_SIZE);
+    std::string rand_new_2_string(rand_new_2_bytes, rand_new_2_bytes + ZC_R_SIZE);
 
     AutoSeededRandomPool prng_1;
     AutoSeededRandomPool prng_2;
@@ -251,11 +251,11 @@ PourTransaction::PourTransaction(uint16_t version_num,
     ciphertext_1_internals.insert(ciphertext_1_internals.end(), c_1_new.r.begin(), c_1_new.r.end());
     ciphertext_1_internals.insert(ciphertext_1_internals.end(), c_1_new.rho.begin(), c_1_new.rho.end());
 
-    assert(ciphertext_1_internals.size() == (ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE));
+    assert(ciphertext_1_internals.size() == (ZC_V_SIZE + ZC_R_SIZE + ZC_RHO_SIZE));
 
-    byte gEncryptBuf[encryptor_1.CiphertextLength(ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE)];
+    byte gEncryptBuf[encryptor_1.CiphertextLength(ZC_V_SIZE + ZC_R_SIZE + ZC_RHO_SIZE)];
 
-    encryptor_1.Encrypt(prng_1, &ciphertext_1_internals[0], ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE, gEncryptBuf);
+    encryptor_1.Encrypt(prng_1, &ciphertext_1_internals[0], ZC_V_SIZE + ZC_R_SIZE + ZC_RHO_SIZE, gEncryptBuf);
 
     std::string C_1_string(gEncryptBuf, gEncryptBuf + sizeof gEncryptBuf / sizeof gEncryptBuf[0]);
     this->ciphertext_1 = C_1_string;
@@ -269,11 +269,11 @@ PourTransaction::PourTransaction(uint16_t version_num,
     ciphertext_2_internals.insert(ciphertext_2_internals.end(), c_2_new.r.begin(), c_2_new.r.end());
     ciphertext_2_internals.insert(ciphertext_2_internals.end(), c_2_new.rho.begin(), c_2_new.rho.end());
 
-    assert(ciphertext_2_internals.size() == (ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE));
+    assert(ciphertext_2_internals.size() == (ZC_V_SIZE + ZC_R_SIZE + ZC_RHO_SIZE));
 
-    byte gEncryptBuf_2[encryptor_2.CiphertextLength(ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE)];
+    byte gEncryptBuf_2[encryptor_2.CiphertextLength(ZC_V_SIZE + ZC_R_SIZE + ZC_RHO_SIZE)];
 
-    encryptor_2.Encrypt(prng_1, &ciphertext_2_internals[0], ZEROCASH_V_SIZE + ZEROCASH_R_SIZE + ZEROCASH_RHO_SIZE, gEncryptBuf_2);
+    encryptor_2.Encrypt(prng_1, &ciphertext_2_internals[0], ZC_V_SIZE + ZC_R_SIZE + ZC_RHO_SIZE, gEncryptBuf_2);
 
     std::string C_2_string(gEncryptBuf_2, gEncryptBuf_2 + sizeof gEncryptBuf_2 / sizeof gEncryptBuf_2[0]);
     this->ciphertext_2 = C_2_string;
@@ -292,22 +292,22 @@ bool PourTransaction::verify(ZerocashParams& params,
     ss.str(this->zkSNARK);
     ss >> proof_SNARK;
 
-	if (merkleRoot.size() != ZEROCASH_ROOT_SIZE) { return false; }
-	if (pubkeyHash.size() != ZEROCASH_H_SIZE)	{ return false; }
-	if (this->serialNumber_1.size() != ZEROCASH_SN_SIZE)	{ return false; }
-	if (this->serialNumber_2.size() != ZEROCASH_SN_SIZE)	{ return false; }
-	if (this->publicValue.size() != ZEROCASH_V_SIZE) { return false; }
-	if (this->MAC_1.size() != ZEROCASH_H_SIZE)	{ return false; }
-	if (this->MAC_2.size() != ZEROCASH_H_SIZE)	{ return false; }
+	if (merkleRoot.size() != ZC_ROOT_SIZE) { return false; }
+	if (pubkeyHash.size() != ZC_H_SIZE)	{ return false; }
+	if (this->serialNumber_1.size() != ZC_SN_SIZE)	{ return false; }
+	if (this->serialNumber_2.size() != ZC_SN_SIZE)	{ return false; }
+	if (this->publicValue.size() != ZC_V_SIZE) { return false; }
+	if (this->MAC_1.size() != ZC_H_SIZE)	{ return false; }
+	if (this->MAC_2.size() != ZC_H_SIZE)	{ return false; }
 
-    std::vector<bool> root_bv(ZEROCASH_ROOT_SIZE * 8);
-    std::vector<bool> sn_old_1_bv(ZEROCASH_SN_SIZE * 8);
-    std::vector<bool> sn_old_2_bv(ZEROCASH_SN_SIZE * 8);
-    std::vector<bool> cm_new_1_bv(ZEROCASH_CM_SIZE * 8);
-    std::vector<bool> cm_new_2_bv(ZEROCASH_CM_SIZE * 8);
-    std::vector<bool> val_pub_bv(ZEROCASH_V_SIZE * 8);
-    std::vector<bool> MAC_1_bv(ZEROCASH_H_SIZE * 8);
-    std::vector<bool> MAC_2_bv(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> root_bv(ZC_ROOT_SIZE * 8);
+    std::vector<bool> sn_old_1_bv(ZC_SN_SIZE * 8);
+    std::vector<bool> sn_old_2_bv(ZC_SN_SIZE * 8);
+    std::vector<bool> cm_new_1_bv(ZC_CM_SIZE * 8);
+    std::vector<bool> cm_new_2_bv(ZC_CM_SIZE * 8);
+    std::vector<bool> val_pub_bv(ZC_V_SIZE * 8);
+    std::vector<bool> MAC_1_bv(ZC_H_SIZE * 8);
+    std::vector<bool> MAC_2_bv(ZC_H_SIZE * 8);
 
     convertBytesVectorToVector(merkleRoot, root_bv);
     convertBytesVectorToVector(this->serialNumber_1, sn_old_1_bv);
@@ -318,21 +318,21 @@ bool PourTransaction::verify(ZerocashParams& params,
     convertBytesVectorToVector(this->MAC_1, MAC_1_bv);
     convertBytesVectorToVector(this->MAC_2, MAC_2_bv);
 
-    unsigned char h_S_bytes[ZEROCASH_H_SIZE];
-    unsigned char pubkeyHash_bytes[ZEROCASH_H_SIZE];
+    unsigned char h_S_bytes[ZC_H_SIZE];
+    unsigned char pubkeyHash_bytes[ZC_H_SIZE];
     convertBytesVectorToBytes(pubkeyHash, pubkeyHash_bytes);
     SHA256_CTX sha256;
     SHA256_Init(&sha256);
-    SHA256_Update(&sha256, pubkeyHash_bytes, ZEROCASH_H_SIZE);
+    SHA256_Update(&sha256, pubkeyHash_bytes, ZC_H_SIZE);
     SHA256_Final(h_S_bytes, &sha256);
 
-    std::vector<bool> h_S_internal(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> h_S_internal(ZC_H_SIZE * 8);
     convertBytesToVector(h_S_bytes, h_S_internal);
     h_S_internal.erase(h_S_internal.end()-2, h_S_internal.end());
     h_S_internal.insert(h_S_internal.begin(), 0);
     h_S_internal.insert(h_S_internal.begin(), 1);
 
-    std::vector<bool> h_S_bv(ZEROCASH_H_SIZE * 8);
+    std::vector<bool> h_S_bv(ZC_H_SIZE * 8);
     convertBytesToVector(h_S_bytes, h_S_bv);
 
     bool snark_result = zerocash_pour_ppzksnark_verifier<ZerocashParams::zerocash_pp>(params.getVerificationKey(),

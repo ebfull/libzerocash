@@ -253,7 +253,7 @@ bool test_pour(libzerocash::ZerocashParams& p,
     libzerocash::IncrementalMerkleTree merkleTree(TEST_TREE_DEPTH);
 
     // Dummy sig_pk
-    vector<unsigned char> as(sig_pk_size, 'a');
+    vector<unsigned char> as(ZC_SIG_PK_SIZE, 'a');
 
     vector<libzerocash::PourInput> pour_inputs;
     vector<libzerocash::PourOutput> pour_outputs;
@@ -265,7 +265,7 @@ bool test_pour(libzerocash::ZerocashParams& p,
         libzerocash::Coin coin(addr.getPublicAddress(), *it);
 
         // commitment from coin
-        std::vector<bool> commitment(cm_size * 8);
+        std::vector<bool> commitment(ZC_CM_SIZE * 8);
         libzerocash::convertBytesVectorToVector(coin.getCoinCommitment().getCommitmentValue(), commitment);
 
         // insert commitment into the merkle tree
@@ -277,9 +277,9 @@ bool test_pour(libzerocash::ZerocashParams& p,
     }
 
     // compute the merkle root we will be working with
-    vector<unsigned char> rt(root_size);
+    vector<unsigned char> rt(ZC_ROOT_SIZE);
     {
-        vector<bool> root_bv(root_size * 8);
+        vector<bool> root_bv(ZC_ROOT_SIZE * 8);
         merkleTree.getRootValue(root_bv);
         libzerocash::convertVectorToBytesVector(root_bv, rt);
     }

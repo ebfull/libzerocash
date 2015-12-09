@@ -23,7 +23,7 @@ PourInput::PourInput(int tree_depth): old_coin(), old_address(), merkle_index(),
 	IncrementalMerkleTree merkleTree(tree_depth);
 
 	// commitment from coin
-	std::vector<bool> commitment(cm_size * 8);
+	std::vector<bool> commitment(ZC_CM_SIZE * 8);
 	convertBytesVectorToVector(this->old_coin.getCoinCommitment().getCommitmentValue(), commitment);
 
 	// insert commitment into the merkle tree

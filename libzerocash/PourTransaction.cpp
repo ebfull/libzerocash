@@ -53,7 +53,7 @@ PourTransaction::PourTransaction(ZerocashParams& params,
                                  uint64_t vpub_in,
                                  uint64_t vpub_out
                                 ) :
-    publicInValue(v_size), publicOutValue(v_size), serialNumber_1(sn_size), serialNumber_2(sn_size), MAC_1(h_size), MAC_2(h_size)
+    publicInValue(ZC_V_SIZE), publicOutValue(ZC_V_SIZE), serialNumber_1(ZC_SN_SIZE), serialNumber_2(ZC_SN_SIZE), MAC_1(ZC_H_SIZE), MAC_2(ZC_H_SIZE)
 {
     if (inputs.size() > 2 || outputs.size() > 2) {
         throw std::length_error("Too many inputs or outputs specified");

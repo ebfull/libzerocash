@@ -21,8 +21,6 @@
 #include <map>
 #include <cstring>
 
-#include "serialize.h"
-
 #include "libsnark/common/data_structures/merkle_tree.hpp"
 
 namespace libzerocash {
@@ -42,14 +40,6 @@ class IncrementalMerkleTreeCompact {
     friend class IncrementalMerkleNode;
 public:
     uint32_t getHeight() { return this->treeHeight; }
-
-    ADD_SERIALIZE_METHODS;
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        READWRITE(treeHeight);
-        READWRITE(hashVec);
-        READWRITE(hashListBytes);
-    }
 
     uint32_t getTreeHeight() { return treeHeight; }
     std::vector< std::vector<unsigned char> > const& getHashVec() { return hashVec; }

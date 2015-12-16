@@ -15,7 +15,6 @@
 #include <vector>
 #include <string>
 
-#include "serialize.h"
 
 namespace libzerocash {
 
@@ -29,14 +28,6 @@ public:
 
     bool operator==(const PrivateAddress& rhs) const;
     bool operator!=(const PrivateAddress& rhs) const;
-
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        READWRITE(a_sk);
-        READWRITE(sk_enc);
-    }
 
     const std::vector<unsigned char>& getAddressSecret() const;
     const std::string getEncryptionSecretKey() const;
@@ -58,13 +49,6 @@ public:
     bool operator==(const PublicAddress& rhs) const;
     bool operator!=(const PublicAddress& rhs) const;
 
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        READWRITE(a_pk);
-        READWRITE(pk_enc);
-    }
 
     const std::vector<unsigned char>& getPublicAddressSecret() const;
     const std::string getEncryptionPublicKey() const;
@@ -88,13 +72,6 @@ public:
     bool operator==(const Address& rhs) const;
     bool operator!=(const Address& rhs) const;
 
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        READWRITE(addr_pk);
-        READWRITE(addr_sk);
-    }
 
     static Address CreateNewRandomAddress();
 

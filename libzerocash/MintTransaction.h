@@ -12,7 +12,6 @@
 #ifndef MINTTRANSACTION_H_
 #define MINTTRANSACTION_H_
 
-#include "serialize.h"
 #include "CoinCommitment.h"
 #include "Coin.h"
 
@@ -56,14 +55,6 @@ public:
      */
     uint64_t getMonetaryValue() const;
 
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-		READWRITE(externalCommitment);
-        READWRITE(coinValue);
-		READWRITE(internalCommitment);
-    }
 
 private:
 	std::vector<unsigned char>	coinValue;			// coin value

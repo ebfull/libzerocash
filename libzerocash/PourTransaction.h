@@ -12,7 +12,6 @@
 #ifndef POURTRANSACTION_H_
 #define POURTRANSACTION_H_
 
-#include "serialize.h"
 #include "Coin.h"
 #include "ZerocashParams.h"
 #include "Zerocash.h"
@@ -130,24 +129,6 @@ public:
     uint64_t getPublicValueIn() const;
 
     uint64_t getPublicValueOut() const;
-
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        READWRITE(version);
-        READWRITE(publicOldValue);
-        READWRITE(publicNewValue);
-        READWRITE(serialNumber_1);
-        READWRITE(serialNumber_2);
-        READWRITE(cm_1);
-        READWRITE(cm_2);
-        READWRITE(MAC_1);
-        READWRITE(MAC_2);
-        READWRITE(ciphertext_1);
-        READWRITE(ciphertext_2);
-        READWRITE(zkSNARK);
-    }
 
 
 private:

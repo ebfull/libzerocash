@@ -34,40 +34,6 @@ using namespace libsnark;
 
 #define TEST_TREE_DEPTH 4
 
-BOOST_AUTO_TEST_CASE( AddressTest ) {
-    cout << "\nADDRESS TEST\n" << endl;
-
-    libzerocash::timer_start("Address");
-    libzerocash::Address newAddress = libzerocash::Address::CreateNewRandomAddress();
-    libzerocash::timer_stop("Address");
-
-    cout << "Successfully created an address.\n" << endl;
-
-    CDataStream serializedAddress(SER_NETWORK, 7002);
-    serializedAddress << newAddress;
-
-    cout << "Successfully serialized an address.\n" << endl;
-
-    libzerocash::Address addressNew = libzerocash::Address::CreateNewRandomAddress();
-    serializedAddress >> addressNew;
-    cout << "Successfully deserialized an address.\n" << endl;
-
-    libzerocash::PublicAddress pubAddress = newAddress.getPublicAddress();
-
-    CDataStream serializedPubAddress(SER_NETWORK, 7002);
-    serializedPubAddress << pubAddress;
-
-    cout << "Successfully serialized a public address.\n" << endl;
-
-    libzerocash::PublicAddress pubAddressNew;
-    serializedPubAddress >> pubAddressNew;
-    cout << "Successfully deserialized a public address.\n" << endl;
-
-    bool result = ((newAddress == addressNew) && (pubAddress == pubAddressNew));
-
-    BOOST_CHECK(result);
-}
-
 BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     cout << "\nSaveAndLoadKeysFromFiles TEST\n" << endl;
 
@@ -133,18 +99,6 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     libzerocash::MintTransaction minttx(coins.at(0));
     cout << "Successfully created a Mint Transaction.\n" << endl;
 
-    cout << "Serializing a mint transaction...\n" << endl;
-    CDataStream serializedMintTx(SER_NETWORK, 7002);
-    serializedMintTx << minttx;
-    cout << "Successfully serialized a mint transaction.\n" << endl;
-
-    libzerocash::MintTransaction minttxNew;
-    serializedMintTx >> minttxNew;
-    cout << "Successfully deserialized a mint transaction.\n" << endl;
-
-    cout << "Verifying a Mint Transaction...\n" << endl;
-    bool minttx_res = minttxNew.verify();
-
     vector<std::vector<bool>> coinValues(5);
     vector<bool> temp_comVal(ZC_CM_SIZE * 8);
     for(size_t i = 0; i < coinValues.size(); i++) {
@@ -205,21 +159,12 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     		c_1_new, c_2_new);
     cout << "Successfully created a pour transaction.\n" << endl;
 
-    cout << "Serializing a pour transaction...\n" << endl;
-    CDataStream serializedPourTx(SER_NETWORK, 7002);
-    serializedPourTx << pourtx;
-    cout << "Successfully serialized a pour transaction.\n" << endl;
-
-    libzerocash::PourTransaction pourtxNew;
-    serializedPourTx >> pourtxNew;
-    cout << "Successfully deserialized a pour transaction.\n" << endl;
-
 	std::vector<unsigned char> pubkeyHash(ZC_SIG_PK_SIZE, 'a');
 
     cout << "Verifying a pour transaction...\n" << endl;
-    bool pourtx_res = pourtxNew.verify(p, pubkeyHash, rt);
+    bool pourtx_res = pourtx.verify(p, pubkeyHash, rt);
 
-    BOOST_CHECK(minttx_res && pourtx_res);
+    return pourtx_res;
 }
 
 BOOST_AUTO_TEST_CASE( PourInputOutputTest ) {
@@ -348,16 +293,6 @@ BOOST_AUTO_TEST_CASE( CoinTest ) {
 
     cout << "Successfully created a coin.\n" << endl;
 
-    CDataStream serializedCoin(SER_NETWORK, 7002);
-    serializedCoin << coin;
-
-    cout << "Successfully serialized a coin.\n" << endl;
-
-    libzerocash::Coin coinNew;
-    serializedCoin >> coinNew;
-
-    cout << "Successfully deserialized a coin.\n" << endl;
-
     ///////////////////////////////////////////////////////////////////////////
 
     libzerocash::timer_start("Coin");
@@ -366,19 +301,7 @@ BOOST_AUTO_TEST_CASE( CoinTest ) {
 
     cout << "Successfully created a coin.\n" << endl;
 
-    CDataStream serializedCoin2(SER_NETWORK, 7002);
-    serializedCoin2 << coin2;
-
-    cout << "Successfully serialized a coin.\n" << endl;
-
-    libzerocash::Coin coinNew2;
-    serializedCoin2 >> coinNew2;
-
-    cout << "Successfully deserialized a coin.\n" << endl;
-
-    bool result = ((coin == coinNew) && (coin2 == coinNew2));
-
-    BOOST_CHECK(result);
+    return true;
 }
 
 BOOST_AUTO_TEST_CASE( MintTxTest ) {
@@ -399,19 +322,8 @@ BOOST_AUTO_TEST_CASE( MintTxTest ) {
 
     cout << "Successfully created a mint transaction.\n" << endl;
 
-    CDataStream serializedMintTx(SER_NETWORK, 7002);
-    serializedMintTx << minttx;
-
-    cout << "Successfully serialized a mint transaction.\n" << endl;
-
-    libzerocash::MintTransaction minttxNew;
-
-    serializedMintTx >> minttxNew;
-
-    cout << "Successfully deserialized a mint transaction.\n" << endl;
-
     libzerocash::timer_start("Mint Transaction Verify");
-    bool minttx_res = minttxNew.verify();
+    bool minttx_res = minttx.verify();
     libzerocash::timer_stop("Mint Transaction Verify");
 
     BOOST_CHECK(minttx_res);
@@ -515,20 +427,10 @@ BOOST_AUTO_TEST_CASE( PourTxTest ) {
 
     cout << "Successfully created a pour transaction.\n" << endl;
 
-    CDataStream serializedPourTx(SER_NETWORK, 7002);
-    serializedPourTx << pourtx;
-
-    cout << "Successfully serialized a pour transaction.\n" << endl;
-
-    libzerocash::PourTransaction pourtxNew;
-    serializedPourTx >> pourtxNew;
-
-    cout << "Successfully deserialized a pour transaction.\n" << endl;
-
 	std::vector<unsigned char> pubkeyHash(ZC_SIG_PK_SIZE, 'a');
 
     libzerocash::timer_start("Pour Transaction Verify");
-    bool pourtx_res = pourtxNew.verify(p, pubkeyHash, rt);
+    bool pourtx_res = pourtx.verify(p, pubkeyHash, rt);
     libzerocash::timer_stop("Pour Transaction Verify");
 
     BOOST_CHECK(pourtx_res);
@@ -663,17 +565,8 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     libzerocash::MintTransaction minttx(coins.at(0));
     cout << "Successfully created a Mint Transaction.\n" << endl;
 
-    cout << "Serializing a mint transaction...\n" << endl;
-    CDataStream serializedMintTx(SER_NETWORK, 7002);
-    serializedMintTx << minttx;
-    cout << "Successfully serialized a mint transaction.\n" << endl;
-
-    libzerocash::MintTransaction minttxNew;
-    serializedMintTx >> minttxNew;
-    cout << "Successfully deserialized a mint transaction.\n" << endl;
-
     cout << "Verifying a Mint Transaction...\n" << endl;
-    bool minttx_res = minttxNew.verify();
+    bool minttx_res = minttx.verify();
 
     vector<std::vector<bool>> coinValues(5);
     vector<bool> temp_comVal(ZC_CM_SIZE * 8);
@@ -737,19 +630,10 @@ BOOST_AUTO_TEST_CASE( SimpleTxTest ) {
     		c_1_new, c_2_new);
     cout << "Successfully created a pour transaction.\n" << endl;
 
-    cout << "Serializing a pour transaction...\n" << endl;
-    CDataStream serializedPourTx(SER_NETWORK, 7002);
-    serializedPourTx << pourtx;
-    cout << "Successfully serialized a pour transaction.\n" << endl;
-
-    libzerocash::PourTransaction pourtxNew;
-    serializedPourTx >> pourtxNew;
-    cout << "Successfully deserialized a pour transaction.\n" << endl;
-
 	std::vector<unsigned char> pubkeyHash(ZC_SIG_PK_SIZE, 'a');
 
     cout << "Verifying a pour transaction...\n" << endl;
-    bool pourtx_res = pourtxNew.verify(p, pubkeyHash, rt);
+    bool pourtx_res = pourtx.verify(p, pubkeyHash, rt);
 
     BOOST_CHECK(minttx_res && pourtx_res);
 }

@@ -164,7 +164,7 @@ BOOST_AUTO_TEST_CASE( SaveAndLoadKeysFromFiles ) {
     cout << "Verifying a pour transaction...\n" << endl;
     bool pourtx_res = pourtx.verify(p, pubkeyHash, rt);
 
-    return pourtx_res;
+    BOOST_CHECK(pourtx_res);
 }
 
 BOOST_AUTO_TEST_CASE( PourInputOutputTest ) {
@@ -246,9 +246,7 @@ bool test_pour(libzerocash::ZerocashParams& p,
 
     libzerocash::PourTransaction pourtx(p, as, rt, pour_inputs, pour_outputs, vpub_in, vpub_out);
 
-    assert(pourtx.verify(p, as, rt));
-
-    return true;
+    BOOST_CHECK(pourtx.verify(p, as, rt));
 }
 
 BOOST_AUTO_TEST_CASE( PourVpubInTest ) {
@@ -300,8 +298,6 @@ BOOST_AUTO_TEST_CASE( CoinTest ) {
     libzerocash::timer_stop("Coin");
 
     cout << "Successfully created a coin.\n" << endl;
-
-    return true;
 }
 
 BOOST_AUTO_TEST_CASE( MintTxTest ) {

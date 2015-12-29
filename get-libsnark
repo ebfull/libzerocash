@@ -35,5 +35,5 @@ if [ "$CURVE" == "BN128" ]; then
     INC_DIR=-fPIC ./prepare-depends.sh
 fi
 make clean
-make lib $LIBSNARK_FLAGS
+CXXFLAGS="-DNO_PT_COMPRESSION=1" make lib $LIBSNARK_FLAGS
 make install PREFIX=$DEPINST $LIBSNARK_FLAGS
